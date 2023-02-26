@@ -182,11 +182,6 @@ var config_data = `
         "x": "Not attempted"
       },
       "defaultValue": "x"
-    },
-    { "name": "Total # of alliance<br>robots docked/engaged",
-      "code": "dn",
-      "gsCol": "numOfRobotsDocked",
-      "type": "counter"
     }
   ],
   "postmatch": [
@@ -202,11 +197,6 @@ var config_data = `
       },
       "defaultValue": "x"
     },
-    { "name": "Links Scored",
-      "code": "ls",
-      "gsCol": "linksScored",
-      "type": "counter"
-    },
     { "name": "Defense Rating",
       "code": "dr",
       "gsCol": "defenseRating",
@@ -219,11 +209,6 @@ var config_data = `
         "x": "Did not play defense"
       },
       "defaultValue": "x"
-    },
-    { "name": "Swerve drive?",
-      "code": "sd",
-      "gsCol": "swerveDrive",
-      "type": "bool"
     },
     { "name": "Speed Rating",
       "code": "sr",
@@ -264,7 +249,7 @@ var config_data = `
       "gsCol": "comments",
       "type": "text",
       "size": 15,
-      "maxSize": 50
+      "maxSize": 500
     }
   ]
 }`;
