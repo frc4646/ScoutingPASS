@@ -168,6 +168,15 @@ h2{
     color: white;
 }
 
+#displayHeadersButton, #copyHeadersButton {
+    font-family: Alexis;
+    padding: 10px;
+    background-color: rgb(151, 240, 218);
+    text-decoration: none;
+    display: inline-block;
+}
+
+
 .undoButton, .flipButton {
     font-family: Alexis;
     background-color: black;
@@ -230,6 +239,13 @@ input {
 .field {
     width: "50%";
     text-align: left;
+}
+
+.field label {
+    padding-right: 10px;
+}
+.field input {
+    margin-bottom: 10px;
 }
 
 #qr-table {

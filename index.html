@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, maximum-scale=1.0">
-		<title>4646 Scouting PASS</title>
+		<title>Scouting PASS</title>
 		<link rel="shortcut icon" href="favicon.ico">
 		<link rel="icon" sizes="16x16 32x32 64x64" href="favicon.ico">
 		<script src="resources/js/easy.qrcode.min.js"></script>
@@ -83,10 +83,15 @@
 					<div>
 						<p id="data" style="text-align:center"></p>
 					</div>
+					<div>
+						<p id="dataHeaders" style="text-align:center"></p>
+					</div>
 				</td><td width="5%">&nbsp;</td></tr>
 			</table>
 					<p></p>
 					<p class="match-label"><input type="button" value="Display Data" id="displayButton" onclick="displayData()"><input type="button" value="Copy Data" id="copyButton" onclick="copyData()"></p>
+					<p class="match-label"><input type="button" value="Display Headers" id="displayHeadersButton" onclick="displayHeaders()"><input type="button" value="Copy Headers" id="copyHeadersButton" onclick="copyHeaders()"></p>
+
 					<div id="submitButton">
 						<button id="submit" type="submit" class="submitForm">Send to Google Sheets</button>
 					</div>

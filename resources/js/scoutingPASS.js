@@ -276,6 +276,8 @@ function addClickableImage(table, idx, name, data) {
   cell.setAttribute("style", "text-align: center;");
   var canvas = document.createElement('canvas');
   //canvas.onclick = onFieldClick;
+  canvas.width*=1.5;
+  canvas.height*=1.5;
   canvas.setAttribute("onclick", "onFieldClick(event)");
   canvas.setAttribute("class", "field-image-src");
   canvas.setAttribute("id", "canvas_" + data.code);
@@ -533,7 +535,7 @@ function addRadio(table, idx, name, data) {
         inp.setAttribute("checked", "");
       }
       cell2.appendChild(inp);
-      cell2.innerHTML += data.choices[c];
+      cell2.innerHTML += "<label for=\"input_" + data.code + "_" + c + "\">" + data.choices[c] + "</label>";
     });
   }
   var inp = document.createElement("input");
@@ -852,10 +854,49 @@ function validateData() {
   return ret
 }
 
+function getHeaders() {
+  var str = ''
+  var start = true
+  inputs = document.querySelectorAll("[id*='input_']");
+  for (e of inputs) {
+    code = e.id.substring(6)
+    name = e.name
+    radio = code.indexOf("_")
+    if (radio > -1) {
+      if (e.checked) {
+        if (start == false) {
+          str = str + '\t'
+        } else {
+          start = false
+        }
+        str = str + code.substr(0, radio)
+        document.getElementById("display_" + code.substr(0, radio)).value = e.value
+      }
+    } else {
+      if (start == false) {
+        str = str + '\t'
+      } else {
+        start = false
+      }
+      if (e.value == "on") {
+        if (e.checked) {
+          str = str + code
+        } else {
+          str = str + code
+        }
+      } else {
+        if (e.className == "cycle") {
+          e = document.getElementById("cycletime_" + code)
+        }
+        str = str + code
+      }
+    }
+  }
+  return str
+}
+
 function getData(useStr) {
   var str = ''
-  var fd = new FormData()
-  var rep = ''
   var start = true
   var checkedChar = 'Y'
   var uncheckedChar = 'N'
@@ -874,22 +915,20 @@ function getData(useStr) {
     if (radio > -1) {
       if (e.checked) {
         if (start == false) {
-          str = str + ';'
+          str = str + '\t'
         } else {
           start = false
         }
-        // str=str+code.substr(0,radio)+'='+code.substr(radio+1)
-        // document.getElementById("display_"+code.substr(0, radio)).value = code.substr(radio+1)
         if (useStr) {
           str = str + code.substr(0, radio) + '=' + e.value
         } else {
-          fd.append(name, '' + e.value)
+          str = str + e.value
         }
         document.getElementById("display_" + code.substr(0, radio)).value = e.value
       }
     } else {
       if (start == false) {
-        str = str + ';'
+        str = str + '\t'
       } else {
         start = false
       }
@@ -898,33 +937,29 @@ function getData(useStr) {
           if (useStr) {
             str = str + code + '=' + checkedChar
           } else {
-            fd.append(name, checkedChar)
+            str = str + checkedChar
           }
         } else {
           if (useStr) {
             str = str + code + '=' + uncheckedChar
           } else {
-            fd.append(name, uncheckedChar)
+            str = str + uncheckedChar
           }
         }
       } else {
-	if (e.className == "cycle") {
-	  e = document.getElementById("cycletime_" + code)
-	}
-	let val = e.value.split(';').join('-').replace(/"/g,'')
+        if (e.className == "cycle") {
+          e = document.getElementById("cycletime_" + code)
+        }
+        let val = e.value.split('\t').join('-').replace(/"/g,'')
         if (useStr) {
           str = str + code + '=' + val
         } else {
-          fd.append(name, val)
+          str = str + val
         }
       }
     }
   }
-  if (useStr) {
-    return str
-  } else {
-    return fd
-  }
+  return str
 }
 
 function updateQRHeader() {
@@ -955,7 +990,7 @@ function qr_regenerate() {
   }
 
   // Get data
-  data = getData(true)
+  data = getData(false)
 
   // Regenerate QR Code
   qr.makeCode(data)
@@ -1097,6 +1132,8 @@ function swipePage(increment) {
       slides[slide].style.display = "table";
       document.getElementById('data').innerHTML = "";
       document.getElementById('copyButton').setAttribute('value','Copy Data');
+      document.getElementById('dataHeaders').innerHTML = "";
+      document.getElementById('copyHeadersButton').setAttribute('value','Copy Headers');
     }
   }
 }
@@ -1440,12 +1477,20 @@ function flip(event) {
 }
 
 function displayData(){
-  document.getElementById('data').innerHTML = getData(true);
+  document.getElementById('data').innerHTML = getData(false);
 }
 
 function copyData(){
-  navigator.clipboard.writeText(getData(true));
+  navigator.clipboard.writeText(getData(false));
   document.getElementById('copyButton').setAttribute('value','Copied');
+}
+
+function displayHeaders(){
+  document.getElementById('dataHeaders').innerHTML = getHeaders(false);
+}
+function copyHeaders(){
+  navigator.clipboard.writeText(getHeaders(false));
+  document.getElementById('copyHeadersButton').setAttribute('value','Copied');
 }
 
 window.onload = function () {
