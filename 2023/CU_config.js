@@ -40,12 +40,12 @@ var config_data = `
       "code": "r",
       "type": "robot",
       "choices": {
-        "r1": "Red-1",
-        "b1": "Blue-1<br>",
-        "r2": "Red-2",
-        "b2": "Blue-2<br>",
-        "r3": "Red-3",
-        "b3": "Blue-3"
+        "red1": "Red-1",
+        "blue1": "Blue-1<br>",
+        "red2": "Red-2",
+        "blue2": "Blue-2<br>",
+        "red3": "Red-3",
+        "blue3": "Blue-3"
       },
       "required":"true"
     },
@@ -172,9 +172,9 @@ var config_data = `
       "code": "ds",
       "type": "radio",
       "choices": {
-        "n": "Not Effective<br>",
-        "a": "Average<br>",
         "v": "Very Effective<br>",
+        "a": "Average<br>",
+        "n": "Not Effective<br>",
         "x": "Not Observed"
       },
       "defaultValue": "x"
@@ -183,10 +183,10 @@ var config_data = `
       "code": "dr",
       "type": "radio",
       "choices": {
-        "b": "Below Average<br>",
-        "a": "Average<br>",
-        "g": "Good<br>",
         "e": "Excellent<br>",
+        "g": "Good<br>",
+        "a": "Average<br>",
+        "b": "Below Average<br>",
         "x": "Did not play defense"
       },
       "defaultValue": "x"
