@@ -693,6 +693,7 @@ function configure() {
     // 10 - 1 or 0
     if ((mydata.checkboxAs == 'YN') ||
       (mydata.checkboxAs == 'TF') ||
+      (mydata.checkboxAs == 'TrueFalse') ||
       (mydata.checkboxAs == '10')) {
       console.log("Setting checkboxAs to " + mydata.checkboxAs);
       checkboxAs = mydata.checkboxAs;
@@ -750,17 +751,17 @@ function configure() {
 }
 
 function getRobot() {
-  if (document.getElementById("input_r_r1").checked) {
+  if (document.getElementById("input_r_red1").checked) {
     return "r1";
-  } else if (document.getElementById("input_r_r2").checked) {
+  } else if (document.getElementById("input_r_red2").checked) {
     return "r2";
-  } else if (document.getElementById("input_r_r3").checked) {
+  } else if (document.getElementById("input_r_red3").checked) {
     return "r3";
-  } else if (document.getElementById("input_r_b1").checked) {
+  } else if (document.getElementById("input_r_blue1").checked) {
     return "b1";
-  } else if (document.getElementById("input_r_b2").checked) {
+  } else if (document.getElementById("input_r_blue2").checked) {
     return "b2";
-  } else if (document.getElementById("input_r_b3").checked) {
+  } else if (document.getElementById("input_r_blue3").checked) {
     return "b3";
   } else {
     return "";
@@ -768,12 +769,12 @@ function getRobot() {
 }
 
 function validateRobot() {
-  if (document.getElementById("input_r_r1").checked ||
-    document.getElementById("input_r_r2").checked ||
-    document.getElementById("input_r_r3").checked ||
-    document.getElementById("input_r_b1").checked ||
-    document.getElementById("input_r_b2").checked ||
-    document.getElementById("input_r_b3").checked
+  if (document.getElementById("input_r_red1").checked ||
+    document.getElementById("input_r_red2").checked ||
+    document.getElementById("input_r_red3").checked ||
+    document.getElementById("input_r_blue1").checked ||
+    document.getElementById("input_r_blue2").checked ||
+    document.getElementById("input_r_blue3").checked
   ) {
     return true
   } else {
@@ -783,23 +784,23 @@ function validateRobot() {
 }
 
 function resetRobot() {
-  if (document.getElementById("input_r_r1").checked) {
-    document.getElementById("input_r_r1").checked = false
+  if (document.getElementById("input_r_red1").checked) {
+    document.getElementById("input_r_red1").checked = false
   }
-  if (document.getElementById("input_r_r2").checked) {
-    document.getElementById("input_r_r2").checked = false
+  if (document.getElementById("input_r_red2").checked) {
+    document.getElementById("input_r_red2").checked = false
   }
-  if (document.getElementById("input_r_r3").checked) {
-    document.getElementById("input_r_r3").checked = false
+  if (document.getElementById("input_r_red3").checked) {
+    document.getElementById("input_r_red3").checked = false
   }
-  if (document.getElementById("input_r_b1").checked) {
-    document.getElementById("input_r_b1").checked = false
+  if (document.getElementById("input_r_blue1").checked) {
+    document.getElementById("input_r_blue1").checked = false
   }
-  if (document.getElementById("input_r_b2").checked) {
-    document.getElementById("input_r_b2").checked = false
+  if (document.getElementById("input_r_blue2").checked) {
+    document.getElementById("input_r_blue2").checked = false
   }
-  if (document.getElementById("input_r_b3").checked) {
-    document.getElementById("input_r_b3").checked = false
+  if (document.getElementById("input_r_blue3").checked) {
+    document.getElementById("input_r_blue3").checked = false
   }
 }
 
@@ -807,7 +808,7 @@ function resetRobot() {
 function getLevel() {
   if (document.getElementById("input_l_qm").checked) {
     return "qm";
-  } else if (document.getElementById("input_l_de").checked) {
+  } else if (document.getElementById("input_l_sf").checked) {
     return "de";
   } else if (document.getElementById("input_l_f").checked) {
     return "f";
@@ -818,7 +819,7 @@ function getLevel() {
 
 function validateLevel() {
   if (document.getElementById("input_l_qm").checked ||
-    document.getElementById("input_l_de").checked ||
+    document.getElementById("input_l_sf").checked ||
     document.getElementById("input_l_f").checked
   ) {
     return true
@@ -906,6 +907,9 @@ function getData(useStr) {
   if (checkboxAs == 'TF') {
     checkedChar = 'T';
     uncheckedChar = 'F';
+  } else if (checkboxAs == 'TrueFalse') {
+    checkedChar = 'True';
+    uncheckedChar = 'False';
   } else if (checkboxAs == '10') {
     checkedChar = '1';
     uncheckedChar = '0';

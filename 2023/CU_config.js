@@ -2,7 +2,7 @@ var config_data = `
 {
   "title": "Scouting PASS 2023",
   "page_title": "4646 Scouting app",
-  "checkboxAs": "10",
+  "checkboxAs": "TrueFalse",
   "prematch": [
     { "name": "Scouter Initials",
       "code": "s",
@@ -23,7 +23,7 @@ var config_data = `
       "type": "level",
       "choices": {
         "qm": "Quals<br>",
-        "de": "Double Elimination<br>",
+        "sf": "Semifinals<br>",
         "f": "Finals"
       },
       "defaultValue": "qm",
@@ -91,8 +91,8 @@ var config_data = `
       "code": "ad",
       "type":"radio",
       "choices": {
-        "d": "Docked (not Engaged)<br>",
         "e": "Engaged<br>",
+        "d": "Docked (not Engaged)<br>",
         "a": "Attempted but failed<br>",
         "x": "Not attempted"
       },
@@ -158,9 +158,9 @@ var config_data = `
       "code": "fs",
       "type":"radio",
       "choices": {
-        "p": "Parked<br>",
-        "d": "Docked (Not Engaged)<br>",
         "e": "Engaged<br>",
+        "d": "Docked (Not Engaged)<br>",
+        "p": "Parked<br>",
         "a": "Attempted but failed<br>",
         "x": "Not attempted"
       },
