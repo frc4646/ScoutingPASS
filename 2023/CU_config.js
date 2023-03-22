@@ -2,7 +2,7 @@ var config_data = `
 {
   "title": "Scouting PASS 2023",
   "page_title": "4646 Scouting app",
-  "checkboxAs": "TrueFalse",
+  "checkboxAs": "TF",
   "prematch": [
     { "name": "Scouter Initials",
       "code": "s",
