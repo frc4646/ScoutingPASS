@@ -2,7 +2,7 @@ var config_data = `
 {
   "title": "Scouting PASS 2023",
   "page_title": "4646 Scouting app",
-  "checkboxAs": "TF",
+  "checkboxAs": "10",
   "prematch": [
     { "name": "Scouter Initials",
       "code": "s",
@@ -162,7 +162,7 @@ var config_data = `
         "d": "Docked (Not Engaged)<br>",
         "p": "Parked<br>",
         "a": "Attempted but failed<br>",
-        "x": "Not attempted"
+        "x": "Not attempted<br>"
       },
       "defaultValue": "x"
     }
@@ -172,10 +172,10 @@ var config_data = `
       "code": "ds",
       "type": "radio",
       "choices": {
-        "v": "Very Effective<br>",
-        "a": "Average<br>",
-        "n": "Not Effective<br>",
-        "x": "Not Observed"
+        "3": "Very Effective<br>",
+        "2": "Average<br>",
+        "1": "Not Effective<br>",
+        "0": "Not Observed<br>"
       },
       "defaultValue": "x"
     },
@@ -183,11 +183,11 @@ var config_data = `
       "code": "dr",
       "type": "radio",
       "choices": {
-        "e": "Excellent<br>",
-        "g": "Good<br>",
-        "a": "Average<br>",
-        "b": "Below Average<br>",
-        "x": "Did not play defense"
+        "4": "Excellent<br>",
+        "3": "Good<br>",
+        "2": "Average<br>",
+        "1": "Below Average<br>",
+        "0": "Did not play defense<br>"
       },
       "defaultValue": "x"
     },
