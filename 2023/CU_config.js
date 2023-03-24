@@ -177,7 +177,7 @@ var config_data = `
         "1": "Not Effective<br>",
         "0": "Not Observed<br>"
       },
-      "defaultValue": "x"
+      "defaultValue": "0"
     },
     { "name": "Defense Rating",
       "code": "dr",
@@ -189,7 +189,7 @@ var config_data = `
         "1": "Below Average<br>",
         "0": "Did not play defense<br>"
       },
-      "defaultValue": "x"
+      "defaultValue": "0"
     },
     { "name": "Speed Rating",
       "code": "sr",
