@@ -249,7 +249,8 @@ var config_data = `
       "gsCol": "comments",
       "type": "text",
       "size": 15,
-      "maxSize": 500
+      "maxSize": 500,
+      "defaultValue" : " "
     }
   ]
 }`;
