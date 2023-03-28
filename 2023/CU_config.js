@@ -8,7 +8,7 @@ var config_data = `
       "code": "s",
       "type": "scouter",
       "size": 5,
-      "maxSize": 5,
+      "maxSize": 10,
       "required": "true"
     },
     { "name": "Event",
@@ -73,7 +73,7 @@ var config_data = `
       "toggleClick": "true",
       "showFlip": "false",
       "showUndo": "false",
-      "shape": "circle 12 black red true"
+      "shape": "circle 12 black blue true"
     },
     { "name": "Crossed Cable",
       "code": "acc",
@@ -125,6 +125,10 @@ var config_data = `
       "code": "wf",
       "type": "bool"
     },
+    { "name": "Played Defence?",
+    "code": "pdef",
+    "type": "bool"
+  },
     { "name": "Was Defended",
       "code": "wd",
       "type": "bool"
@@ -178,6 +182,21 @@ var config_data = `
         "0": "Not Observed<br>"
       },
       "defaultValue": "0"
+    },
+    { "name": "Human Player Stations Used",
+      "code": "hpsu",
+      "type": "radio",
+      "choices": {
+        "3": "Drop Station<br>",
+        "2": "Shelf Stattion<br>",
+        "1": "Both<br>",
+        "0": "None"
+      },
+      "defaultValue": "0"
+    },
+    { "name": "Links Scored",
+      "code": "ls",
+      "type": "counter"
     },
     { "name": "Defense Rating",
       "code": "dr",

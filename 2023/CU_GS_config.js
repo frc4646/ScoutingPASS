@@ -9,8 +9,8 @@ var config_data = `
       "code": "s",
       "gsCol": "scouter",
       "type": "scouter",
-      "size": 5,
-      "maxSize": 5,
+      "size": 10,
+      "maxSize": 10,
       "required": "true"
     },
     { "name": "Event",
