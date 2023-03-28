@@ -583,7 +583,7 @@ function addCheckbox(table, idx, name, data) {
   cell2.appendChild(inp);
 
   if (data.type == 'bool') {
-    cell2.innerHTML += "(checked = Yes)";
+    cell2.innerHTML += "<label for=\"input_" + data.code + "\">" +  "(checked = Yes)" + "</label>";
   }
 
   if (data.hasOwnProperty('defaultValue')) {

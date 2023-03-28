@@ -75,6 +75,10 @@ var config_data = `
       "showUndo": "false",
       "shape": "circle 12 black blue true"
     },
+    { "name": "Droped Peice Count",
+      "code": "adc",
+      "type": "counter"
+    },
     { "name": "Crossed Cable",
       "code": "acc",
       "type": "bool"
@@ -100,10 +104,6 @@ var config_data = `
     }
   ],
   "teleop": [
-    { "name": "Cycle Timer",
-      "code": "tct",
-      "type": "cycle"
-    },
     { "name": "Grid Scoring",
       "code": "tsg",
       "type": "clickable_image",
@@ -113,15 +113,13 @@ var config_data = `
       "toggleClick": "true",
       "showFlip": "false",
       "showUndo": "false",
-      "shape": "circle 12 black red true",
-      "cycleTimer": "tct"
+      "shape": "circle 12 black red true"
     },
-    { "name": "Feeder Count<br>(Fed another bot)",
-      "code": "tfc",
-      "type": "counter",
-      "cycleTimer": "tct"
+    { "name": "Droped Peice Count",
+      "code": "tdc",
+      "type": "counter"
     },
-    { "name": "Was Fed<br>Game Pieces",
+    { "name": "Pushed Game Peices",
       "code": "wf",
       "type": "bool"
     },
@@ -139,7 +137,13 @@ var config_data = `
     },
     { "name": "Smart Placement<br>(creates Links)",
       "code": "lnk",
-      "type": "bool"
+      "type": "radio",
+      "choices": {
+        "y": "Yes<br>",
+        "n": "No<br>",
+        "z": "Not Observed"
+      },
+        "defaultValue": "z"
     },
     { "name": "Floor Pickup",
       "code": "fpu",
