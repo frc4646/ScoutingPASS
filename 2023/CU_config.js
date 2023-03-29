@@ -119,6 +119,10 @@ var config_data = `
       "code": "tdc",
       "type": "counter"
     },
+    { "name": "Links Scored",
+    "code": "ls",
+    "type": "counter"
+  },
     { "name": "Pushed Game Peices",
       "code": "wf",
       "type": "bool"
@@ -155,7 +159,18 @@ var config_data = `
         "x": "Not Attempted"
       },
       "defaultValue": "x"
-    }
+    },  
+    { "name": "Human Player Stations Used",
+    "code": "hpsu",
+    "type": "radio",
+    "choices": {
+      "3": "Drop Station<br>",
+      "2": "Shelf Stattion<br>",
+      "1": "Both<br>",
+      "0": "None"
+    },
+    "defaultValue": "0"
+  }
   ],
   "endgame": [
     { "name": "Docking Timer",
@@ -187,21 +202,7 @@ var config_data = `
       },
       "defaultValue": "0"
     },
-    { "name": "Human Player Stations Used",
-      "code": "hpsu",
-      "type": "radio",
-      "choices": {
-        "3": "Drop Station<br>",
-        "2": "Shelf Stattion<br>",
-        "1": "Both<br>",
-        "0": "None"
-      },
-      "defaultValue": "0"
-    },
-    { "name": "Links Scored",
-      "code": "ls",
-      "type": "counter"
-    },
+
     { "name": "Defense Rating",
       "code": "dr",
       "type": "radio",
@@ -234,14 +235,17 @@ var config_data = `
       "code": "tip",
       "type": "bool"
     },
-    { "name": "Dropped Cones (>2)",
-      "code": "dc",
-      "type": "bool"
-    },
+   
     { "name": "Make good<br>alliance partner?",
       "tooltip": "Would you want this robot on your alliance in eliminations?",
       "code": "all",
-      "type": "bool"
+      "type": "radio",
+      "choices": {
+        "y": "Yes<br>",
+        "n": "No<br>",
+        "s": "Not Sure" 
+      },
+      "required": "true"
     },
     { "name": "Comments",
       "code": "co",

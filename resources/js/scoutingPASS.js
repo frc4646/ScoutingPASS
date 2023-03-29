@@ -24,6 +24,7 @@ var options = {
 // Must be filled in: e=event, m=match#, l=level(q,qf,sf,f), t=team#, r=robot(r1,r2,b1..), s=scouter
 //var requiredFields = ["e", "m", "l", "t", "r", "s", "as"];
 var requiredFields = ["e", "m", "l", "r", "s", "as"];
+var requiredFieldsEnd = ["all"];
 
 function addTimer(table, idx, name, data) {
   var row = table.insertRow(idx);
@@ -1133,14 +1134,38 @@ function swipePage(increment) {
   if (qr_regenerate() == true) {
     slides = document.getElementById("main-panel-holder").children
     if (slide + increment < slides.length && slide + increment >= 0) {
-      slides[slide].style.display = "none";
-      slide += increment;
-      window.scrollTo(0, 0);
-      slides[slide].style.display = "table";
-      document.getElementById('data').innerHTML = "";
-      document.getElementById('copyButton').setAttribute('value','Copy Data');
-      document.getElementById('dataHeaders').innerHTML = "";
-      document.getElementById('copyHeadersButton').setAttribute('value','Copy Headers');
+      if((slide == (slides.length - 2)) && (increment > 0))
+      {
+        //Check for alliance selection
+        if(document.getElementById("input_all_y").checked ||
+        document.getElementById("input_all_n").checked ||
+        document.getElementById("input_all_s").checked)
+        {
+          slides[slide].style.display = "none";
+          slide += increment;
+          window.scrollTo(0, 0);
+          slides[slide].style.display = "table";
+          document.getElementById('data').innerHTML = "";
+          document.getElementById('copyButton').setAttribute('value','Copy Data');
+          document.getElementById('dataHeaders').innerHTML = "";
+          document.getElementById('copyHeadersButton').setAttribute('value','Copy Headers');
+        }
+        else
+        { 
+          alert("Select Alliance compatibility");
+        }
+      }
+      else
+      {
+        slides[slide].style.display = "none";
+        slide += increment;
+        window.scrollTo(0, 0);
+        slides[slide].style.display = "table";
+        document.getElementById('data').innerHTML = "";
+        document.getElementById('copyButton').setAttribute('value','Copy Data');
+        document.getElementById('dataHeaders').innerHTML = "";
+        document.getElementById('copyHeadersButton').setAttribute('value','Copy Headers');
+      }
     }
   }
 }
