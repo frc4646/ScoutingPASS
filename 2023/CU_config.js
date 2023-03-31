@@ -122,7 +122,12 @@ var config_data = `
     { "name": "Links Scored",
     "code": "ls",
     "type": "counter"
-  },
+  }, 
+  { "name": "Penalties Earned",
+  "code": "pe",
+  "type": "counter"
+},
+
     { "name": "Pushed Game Peices",
       "code": "wf",
       "type": "bool"
@@ -173,10 +178,7 @@ var config_data = `
   }
   ],
   "endgame": [
-    { "name": "Docking Timer",
-      "code": "dt",
-      "type": "timer"
-    },
+
     { "name": "Final Status",
       "code": "fs",
       "type":"radio",

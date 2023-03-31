@@ -165,11 +165,7 @@ var config_data = `
     }
   ],
   "endgame": [
-    { "name": "Docking Timer",
-      "code": "dt",
-      "gsCol": "dockingTime",
-      "type": "timer"
-    },
+  
     { "name": "Final Status",
       "code": "fs",
       "gsCol": "endgameStatus",
