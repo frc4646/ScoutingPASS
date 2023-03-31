@@ -120,22 +120,21 @@ var config_data = `
       "type": "counter"
     },
     { "name": "Links Scored",
-    "code": "ls",
-    "type": "counter"
-  }, 
-  { "name": "Penalties Earned",
-  "code": "pe",
-  "type": "counter"
-},
-
+      "code": "ls",
+      "type": "counter"
+    }, 
+    { "name": "Penalties Earned",
+      "code": "pe",
+      "type": "counter"
+    },
     { "name": "Pushed Game Peices",
       "code": "wf",
       "type": "bool"
     },
     { "name": "Played Defence?",
-    "code": "pdef",
-    "type": "bool"
-  },
+      "code": "pdef",
+      "type": "bool"
+    },
     { "name": "Was Defended",
       "code": "wd",
       "type": "bool"
