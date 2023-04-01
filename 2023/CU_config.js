@@ -75,7 +75,7 @@ var config_data = `
       "showUndo": "false",
       "shape": "circle 12 black blue true"
     },
-    { "name": "Droped Peice Count",
+    { "name": "Dropped Piece Count",
       "code": "adc",
       "type": "counter"
     },
@@ -115,7 +115,7 @@ var config_data = `
       "showUndo": "false",
       "shape": "circle 12 black red true"
     },
-    { "name": "Droped Peice Count",
+    { "name": "Dropped Piece Count",
       "code": "tdc",
       "type": "counter"
     },
@@ -127,11 +127,11 @@ var config_data = `
       "code": "pe",
       "type": "counter"
     },
-    { "name": "Pushed Game Peices",
+    { "name": "Pushed Game Pieces",
       "code": "wf",
       "type": "bool"
     },
-    { "name": "Played Defence?",
+    { "name": "Played Defense?",
       "code": "pdef",
       "type": "bool"
     },
