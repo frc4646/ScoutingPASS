@@ -14,7 +14,7 @@ var config_data = `
     { "name": "Event",
       "code": "e",
       "type": "event",
-      "defaultValue": "2023iacf",
+      "defaultValue": "2023oktu",
       "required": "true",
       "disabled": "true"
     },
