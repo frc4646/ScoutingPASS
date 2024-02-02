@@ -65,10 +65,6 @@ var config_data = `
     }
   ],
   "auton": [
-    { "name": "Leave Starting Zone",
-      "code": "al",
-      "type": "bool"
-    },
     { "name": "Amp Scores",
       "code": "aas",
       "type": "counter"
@@ -76,6 +72,16 @@ var config_data = `
     { "name": "Speaker Scores",
       "code": "ass",
       "type": "counter"
+    },
+    { "name": "Speaker Shots Missed",
+      "code": "asm",
+      "type": "counter"
+    },
+    { "name": "Note Pickup Zone",
+      "code": "anpz",
+      "type": "clickable_image",
+      "filename": "2024/field_image.png",
+      "shape": "circle 5 black red true"
     }
   ],
   "teleop": [
@@ -101,13 +107,24 @@ var config_data = `
         "x": "Not Attempted"
       },
       "defaultValue": "x"
+    },
+    { "name": "Play Defense",
+      "code": "tpd",
+      "type": "bool"
+    },
+    { "name": "Dropped Notes",
+      "code": "tdn",
+      "type": "counter"
+    },
+    { "name": "Shooting Position",
+      "code": "tsp",
+      "type": "clickable_image",
+      "dimensions": "6 2",
+      "filename": "2024/field_image.png",
+      "shape": "stupid 5 white yellow true"
     }
   ],
   "endgame": [
-    { "name": "Stage Timer",
-      "code": "dt",
-      "type": "timer"
-    },
     { "name": "Final Status",
       "code": "fs",
       "type":"radio",
