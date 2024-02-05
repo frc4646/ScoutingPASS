@@ -24,7 +24,6 @@ var options = {
 // Must be filled in: e=event, m=match#, l=level(q,qf,sf,f), t=team#, r=robot(r1,r2,b1..), s=scouter
 //var requiredFields = ["e", "m", "l", "t", "r", "s", "as"];
 var requiredFields = ["e", "m", "l", "r", "s", "as"];
-var requiredFieldsEnd = ["all"];
 
 function addTimer(table, idx, name, data) {
   var row = table.insertRow(idx);
@@ -859,6 +858,27 @@ function getData(dataFormat) {
   }
 }
 
+function getHeaders(dataFormat) {
+  var Form = document.forms.scoutingForm;
+  var UniqueFieldNames = [];
+  
+  // collect the names of all the elements in the form
+  var fieldnames = Array.from(Form.elements, formElmt => formElmt.name);
+
+  // make sure to add the name attribute only to elements from which you want to collect values.  Radio button groups all share the same name
+  // so those element names need to be de-duplicated here as well.
+  fieldnames.forEach((fieldname) => { if (fieldname != "" && !UniqueFieldNames.includes(fieldname)) { UniqueFieldNames.push(fieldname) } });
+
+  if (dataFormat == "kvs") {
+    return UniqueFieldNames.join(";")
+  } else if (dataFormat == "tsv") {
+    return UniqueFieldNames.join("\t")
+  } else {
+    return "unsupported dataFormat"
+  }
+
+}
+
 function updateQRHeader() {
   let str = 'Event: !EVENT! Match: !MATCH! Robot: !ROBOT! Team: !TEAM!';
 
@@ -1029,38 +1049,7 @@ function swipePage(increment) {
       slides[slide].style.display = "table";
       document.getElementById('data').innerHTML = "";
       document.getElementById('copyButton').setAttribute('value','Copy Data');
-      if((slide == (slides.length - 2)) && (increment > 0))
-      {
-        //Check for alliance selection
-        if(document.getElementById("input_all_y").checked ||
-        document.getElementById("input_all_n").checked ||
-        document.getElementById("input_all_s").checked)
-        {
-          slides[slide].style.display = "none";
-          slide += increment;
-          window.scrollTo(0, 0);
-          slides[slide].style.display = "table";
-          document.getElementById('data').innerHTML = "";
-          document.getElementById('copyButton').setAttribute('value','Copy Data');
-          document.getElementById('dataHeaders').innerHTML = "";
-          document.getElementById('copyHeadersButton').setAttribute('value','Copy Headers');
-        }
-        else
-        { 
-          alert("Select Alliance compatibility");
-        }
-      }
-      else
-      {
-        slides[slide].style.display = "none";
-        slide += increment;
-        window.scrollTo(0, 0);
-        slides[slide].style.display = "table";
-        document.getElementById('data').innerHTML = "";
-        document.getElementById('copyButton').setAttribute('value','Copy Data');
-        document.getElementById('dataHeaders').innerHTML = "";
-        document.getElementById('copyHeadersButton').setAttribute('value','Copy Headers');
-      }
+      document.getElementById('copyHeadersButton').setAttribute('value','Copy Headers');
     }
   }
 }
@@ -1421,10 +1410,10 @@ function copyData(){
 }
 
 function displayHeaders(){
-  document.getElementById('dataHeaders').innerHTML = getHeaders(false);
+  document.getElementById('dataHeaders').innerHTML = getHeaders(dataFormat);
 }
 function copyHeaders(){
-  navigator.clipboard.writeText(getHeaders(false));
+  navigator.clipboard.writeText(getHeaders(dataFormat));
   document.getElementById('copyHeadersButton').setAttribute('value','Copied');
 }
 
