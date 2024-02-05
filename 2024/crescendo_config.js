@@ -40,12 +40,12 @@ var config_data = `
       "code": "r",
       "type": "robot",
       "choices": {
-        "r1": "Red-1",
-        "b1": "Blue-1<br>",
-        "r2": "Red-2",
-        "b2": "Blue-2<br>",
-        "r3": "Red-3",
-        "b3": "Blue-3"
+        "r1": "Blue-1",
+        "b1": "Red-1<br>",
+        "r2": "Blue-2",
+        "b2": "Red-2<br>",
+        "r3": "Blue-3",
+        "b3": "Red-3"
       },
       "required":"true"
     },
@@ -60,8 +60,10 @@ var config_data = `
       "type": "clickable_image",
       "filename": "2024/field_image.png",
       "clickRestriction": "one",
-      "allowableResponses": "1 12 13 24 25 36 37 48 49 60 61 72",
-      "shape": "circle 5 black red true"
+      "dimensions": "9 5",
+      "allowableResponses": "1 9 10 18 19 27 28 36 37 45",
+      "shape": "circle 8 black red true",
+      "width": "full"
     }
   ],
   "auton": [
@@ -76,6 +78,17 @@ var config_data = `
     { "name": "Speaker Scores",
       "code": "ass",
       "type": "counter"
+    },
+    { "name": "Auto Notes",
+      "code": "an",
+      "type": "clickable_image",
+      "filename": "2024/field_image.png",
+      "clickRestriction": "onePerBox",
+      "toggleClick": "true",
+      "dimensions": "9 5",
+      "allowableResponses": "2 5 8 11 14 17 20 23 26 32 41",
+      "shape": "circle 30 black orange true",
+      "width": "full"
     }
   ],
   "teleop": [
