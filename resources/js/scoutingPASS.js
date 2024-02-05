@@ -257,6 +257,9 @@ function clearForm() {
     } else {
       document.getElementById("input_m").value = match + 1
     }
+    
+    document.getElementById("input_t").value = getCurrentTeamNumberFromRobot().replace("frc", "");
+    onTeamnameChange();
 
 
 
@@ -277,6 +280,7 @@ function clearForm() {
 
     // Don't clear key fields
     if (code == "m") continue
+    if (code == "t") continue
     if (code.substring(0, 2) == "r_") continue
     if (code.substring(0, 2) == "l_") continue
     if (code == "e") continue
@@ -302,7 +306,7 @@ function clearForm() {
         }
       }
     } else {
-      if (e.type == "number" || e.type == "text" || e.type == "hidden") {
+      if (e.type == "number" || e.type == "text" || e.type == "textarea"  || e.type == "hidden") {
         if ((e.className == "counter") ||
           (e.className == "timer") ||
           (e.className == "cycle")) {

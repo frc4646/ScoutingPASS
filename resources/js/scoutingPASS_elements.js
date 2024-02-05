@@ -33,6 +33,7 @@ function addTimer(table, idx, name, data) {
         ct = document.createElement('input');
         ct.setAttribute("type", "text");
         ct.setAttribute("id", "display_" + data.code);
+        ct.setAttribute("width", "400px");
         ct.setAttribute("value", "");
         ct.setAttribute("disabled", "");
         cell.appendChild(ct);
@@ -44,6 +45,15 @@ function addTimer(table, idx, name, data) {
     button1.setAttribute("type", "button");
     button1.setAttribute("onclick", "timer(this.parentElement)");
     button1.setAttribute("value", "Start");
+
+    if (data.hasOwnProperty('autoStart')) {
+        if (data.autoStart == "true") {
+            button1.setAttribute("onload", "timer(this.parentElement)");
+            button1.addEventListener('DOMContentLoaded', function () {
+                alert("Ready!");
+            }, false);
+        }
+    }
     cell.appendChild(button1);
 
     var inp = document.createElement("input");
@@ -77,12 +87,29 @@ function addTimer(table, idx, name, data) {
     var lineBreak = document.createElement("br");
     cell.appendChild(lineBreak);
 
+    var button1force = document.createElement("input");
+    button1force.setAttribute("id", "startForce_" + data.code);
+    button1force.setAttribute("type", "button");
+    button1force.setAttribute("onclick", "timerForceStart(this.parentElement)");
+    button1force.setAttribute("value", "Start Force");
+    button1force.style.visibility = "hidden";
+    cell.appendChild(button1force);
+
+    let showControls = true;
+    if (data.hasOwnProperty('hideControls')) {
+        if (data.hideControls.toLowerCase() == 'true') {
+            showControls = false;
+        }
+    }
     if (data.type == 'cycle') {
         var button3 = document.createElement("input");
         button3.setAttribute("id", "cycle_" + data.code);
         button3.setAttribute("type", "button");
         button3.setAttribute("onclick", "newCycle(this.parentElement)");
         button3.setAttribute("value", "New Cycle");
+        if (!showControls) {
+            button3.style.visibility = "hidden";
+        }
         cell.appendChild(button3);
         var button4 = document.createElement("input");
         button4.setAttribute("id", "undo_" + data.code);
@@ -90,6 +117,9 @@ function addTimer(table, idx, name, data) {
         button4.setAttribute("onclick", "undoCycle(this.parentElement)");
         button4.setAttribute("value", "Undo");
         button4.setAttribute('style', "margin-left: 20px;");
+        if (!showControls) {
+            button4.style.visibility = "hidden";
+        }
         cell.appendChild(button4);
     }
 
@@ -117,6 +147,7 @@ function addTimer(table, idx, name, data) {
         def.setAttribute("value", data.defaultValue);
         cell2.appendChild(def);
     }
+
 
     return idx + 1;
 }
@@ -227,7 +258,7 @@ function addClickableImage(table, idx, name, data) {
             // Undo button
             let undoButton = document.createElement("input");
             undoButton.setAttribute("type", "button");
-            undoButton.setAttribute("onclick", "undo(this.parentElement)");
+            undoButton.setAttribute("onclick", "undo(this.parentElement, event)");
             undoButton.setAttribute("value", "Undo");
             undoButton.setAttribute("id", "undo_" + data.code);
             undoButton.setAttribute("class", "undoButton");
@@ -257,30 +288,24 @@ function addClickableImage(table, idx, name, data) {
     var canvas = document.createElement('canvas');
     if (data.hasOwnProperty('width') && data.width != "") {
         if (data.width == "full") {
-            canvas.width = Math.min((window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth)*.95, 1000);
+            canvas.width = Math.min((window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth) * .95, 1000);
+        } else {
+            canvas.width = data.width;
         }
-        else
-        {
-            canvas.width =  data.width;
-        }
-    }
-    else
-    {
+    } else {
         canvas.width *= 1.5;
     }
     if (data.hasOwnProperty('height') && data.height != "") {
-        canvas.height =  data.height;
-    }
-    else
-    {
+        canvas.height = data.height;
+    } else {
         const img = new Image();
 
         // get the image
         img.src = data.filename;
 
         // get height and width
-        img.onload = function() {
-            canvas.height =  canvas.width / this.width * this.height;
+        img.onload = function () {
+            canvas.height = canvas.width / this.width * this.height;
         }
     }
     canvas.setAttribute("onclick", "onFieldClick(event)");
@@ -423,6 +448,63 @@ function addText(table, idx, name, data) {
     }
     if (data.hasOwnProperty('size')) {
         inp.setAttribute("size", data.size);
+    }
+    if (data.hasOwnProperty('maxSize')) {
+        inp.setAttribute("maxLength", data.maxSize);
+    }
+    if (data.hasOwnProperty('defaultValue')) {
+        if (data.type == 'event') {
+            data.defaultValue = data.defaultValue.toLowerCase();
+        }
+        inp.setAttribute("value", data.defaultValue);
+    }
+    if (data.hasOwnProperty('required')) {
+        inp.setAttribute("required", "");
+    }
+    if (data.hasOwnProperty('disabled')) {
+        inp.setAttribute("disabled", "");
+    }
+    cell2.appendChild(inp);
+
+    if (data.hasOwnProperty('defaultValue')) {
+        var def = document.createElement("input");
+        def.setAttribute("id", "default_" + data.code)
+        def.setAttribute("type", "hidden");
+        def.setAttribute("value", data.defaultValue);
+        cell2.appendChild(def);
+    }
+
+    return idx + 1
+}
+
+function addTextArea(table, idx, name, data) {
+    var row = table.insertRow(idx);
+    var cell1 = row.insertCell(0);
+    cell1.classList.add("title");
+    if (!data.hasOwnProperty('code')) {
+        cell1.innerHTML = `Error: No code specified for ${name}`;
+        return idx + 1;
+    }
+    var cell2 = row.insertCell(1);
+    cell1.innerHTML = name + '&nbsp;';
+    if (data.hasOwnProperty('tooltip')) {
+        cell1.setAttribute("title", data.tooltip);
+    }
+    cell2.classList.add("field");
+    var inp = document.createElement("textarea");
+    inp.setAttribute("id", "input_" + data.code);
+    inp.setAttribute("type", "text");
+    inp.setAttribute("style", "resize: none;");
+    if (enableGoogleSheets && data.hasOwnProperty('gsCol')) {
+        inp.setAttribute("name", data.gsCol);
+    } else {
+        inp.setAttribute("name", data.code);
+    }
+    if (data.hasOwnProperty('cols')) {
+        inp.setAttribute("cols", data.cols);
+    }
+    if (data.hasOwnProperty('rows')) {
+        inp.setAttribute("rows", data.rows);
     }
     if (data.hasOwnProperty('maxSize')) {
         inp.setAttribute("maxLength", data.maxSize);
@@ -616,9 +698,11 @@ function addCheckbox(table, idx, name, data) {
 function addElement(table, idx, data) {
     var type = null;
     var name = 'Default Name';
+
     if (data.hasOwnProperty('name')) {
         name = data.name
     }
+
     if (data.hasOwnProperty('type')) {
         type = data.type
     } else {
@@ -634,33 +718,21 @@ function addElement(table, idx, data) {
     }
     if (type == 'counter') {
         idx = addCounter(table, idx, name, data);
-    } else if ((data.type == 'scouter') ||
-        (data.type == 'event') ||
-        (data.type == 'text')
-    ) {
+    } else if ((data.type == 'scouter') || (data.type == 'event') || (data.type == 'text')) {
         idx = addText(table, idx, name, data);
-    } else if ((data.type == 'level') ||
-        (data.type == 'radio') ||
-        (data.type == 'robot')
-    ) {
+    } else if (data.type == 'text_area') {
+        idx = addTextArea(table, idx, name, data);
+    } else if ((data.type == 'level') || (data.type == 'radio') || (data.type == 'robot')) {
         idx = addRadio(table, idx, name, data);
-    } else if ((data.type == 'match') ||
-        (data.type == 'team') ||
-        (data.type == 'number')
-    ) {
+    } else if ((data.type == 'match') || (data.type == 'team') || (data.type == 'number')) {
         idx = addNumber(table, idx, name, data);
-    } else if ((data.type == 'field_image') ||
-        (data.type == 'clickable_image')) {
+    } else if ((data.type == 'field_image') || (data.type == 'clickable_image')) {
         idx = addClickableImage(table, idx, name, data);
-    } else if ((data.type == 'bool') ||
-        (data.type == 'checkbox') ||
-        (data.type == 'pass_fail')
-    ) {
+    } else if ((data.type == 'bool') || (data.type == 'checkbox') || (data.type == 'pass_fail')) {
         idx = addCheckbox(table, idx, name, data);
     } else if (data.type == 'counter') {
         idx = addCounter(table, idx, name, data);
-    } else if ((data.type == 'timer') ||
-        (data.type == 'cycle')) {
+    } else if ((data.type == 'timer') || (data.type == 'cycle')) {
         idx = addTimer(table, idx, name, data);
     } else {
         console.log(`Unrecognized type: ${data.type}`);
@@ -697,168 +769,4 @@ function counter(element, step) {
     if (step >= 0 && cycleTimer != null) {
         document.getElementById("cycle_" + cycleTimer.value).click();
     }
-}
-
-function undo(event) {
-    let undoID = event.firstChild;
-    //Getting rid of last value
-    changingXY = document.getElementById("XY" + getIdBase(undoID.id));
-    changingInput = document.getElementById("input" + getIdBase(undoID.id));
-    var tempValue = Array.from(JSON.parse(changingXY.value));
-    tempValue.pop();
-    changingXY.value = JSON.stringify(tempValue);
-
-    tempValue = Array.from(JSON.parse(changingInput.value));
-    tempValue.pop();
-    changingInput.value = JSON.stringify(tempValue);
-    drawFields();
-}
-
-function flip(event) {
-    let flipID = event.firstChild;
-    var flipImg = document.getElementById("canvas" + getIdBase(flipID.id));
-    if (flipImg.style.transform == "") {
-        flipImg.style.transform = 'rotate(180deg)';
-    } else {
-        flipImg.style.transform = '';
-    }
-    drawFields();
-}
-
-
-function drawFields(name) {
-    var fields = document.querySelectorAll("[id*='canvas_']");
-
-    for (f of fields) {
-        code = f.id.substring(7);
-        var img = document.getElementById("img_" + code);
-        var shape = document.getElementById("shape_" + code);
-        let shapeArr = shape.value.split(' ');
-        var ctx = f.getContext("2d");
-        ctx.clearRect(0, 0, f.width, f.height);
-        ctx.drawImage(img, 0, 0, f.width, f.height);
-
-        var xyStr = document.getElementById("XY_" + code).value
-        if (JSON.stringify(xyStr).length > 2) {
-            pts = Array.from(JSON.parse(xyStr))
-            for (p of pts) {
-                var coord = p.split(",")
-                var centerX = coord[0];
-                var centerY = coord[1];
-                var radius = 5;
-                ctx.beginPath();
-                if (shapeArr[0].toLowerCase() == 'circle') {
-                    ctx.arc(centerX, centerY, shapeArr[1], 0, 2 * Math.PI, false);
-                } else {
-                    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-                }
-                ctx.lineWidth = 2;
-                if (shapeArr[2] != "") {
-                    ctx.strokeStyle = shapeArr[2];
-                } else {
-                    ctx.strokeStyle = '#FFFFFF';
-                }
-                if (shapeArr[4].toLowerCase() == 'true') {
-                    ctx.fillStyle = shapeArr[3];
-                }
-                ctx.stroke();
-                if (shapeArr[4].toLowerCase() == 'true') {
-                    ctx.fill();
-                }
-            }
-        }
-    }
-}
-
-function onFieldClick(event) {
-    let target = event.target;
-    let base = getIdBase(target.id);
-
-    //Resolution height and width (e.g. 52x26)
-    let resX = 12;
-    let resY = 6;
-
-    let dimensions = document.getElementById("dimensions" + base);
-    if (dimensions.value != "") {
-        let arr = dimensions.value.split(' ');
-        resX = arr[0];
-        resY = arr[1];
-    }
-
-    //Turns coordinates into a numeric box
-    let box = ((Math.ceil(event.offsetY / target.height * resY) - 1) * resX) + Math.ceil(event.offsetX / target.width * resX);
-    let coords = event.offsetX + "," + event.offsetY;
-
-    let allowableResponses = document.getElementById("allowableResponses" + base).value;
-
-    if (allowableResponses != "none") {
-        allowableResponsesList = allowableResponses.split(',').map(Number);
-        if (allowableResponsesList.indexOf(box) == -1) {
-            return;
-        }
-    }
-
-    //Cumulating values
-    let changingXY = document.getElementById("XY" + base);
-    let changingInput = document.getElementById("input" + base);
-    let clickRestriction = document.getElementById("clickRestriction" + base).value;
-    let toggleClick = document.getElementById("toggleClick" + base).value;
-    let cycleTimer = document.getElementById("cycleTimer" + base);
-    let boxArr = Array.from(JSON.parse(changingInput.value));
-    let xyArr = Array.from(JSON.parse(changingXY.value));
-
-    if ((toggleClick.toLowerCase() == 'true') &&
-        (boxArr.includes(box))) {
-        // Remove it
-        let idx = boxArr.indexOf(box);
-        boxArr.splice(idx, 1);
-        xyArr.splice(idx, 1);
-        changingInput.value = JSON.stringify(boxArr);
-        changingXY.value = JSON.stringify(xyArr);
-    } else {
-        if (JSON.stringify(changingXY.value).length <= 2) {
-            changingXY.value = JSON.stringify([coords]);
-            changingInput.value = JSON.stringify([box]);
-        } else if (clickRestriction == "one") {
-            // Replace box and coords
-            changingXY.value = JSON.stringify([coords]);
-            changingInput.value = JSON.stringify([box]);
-        } else if (clickRestriction == "onePerBox") {
-            // Add if box already not in box list/Array
-            if (!boxArr.includes(box)) {
-                boxArr.push(box);
-                changingInput.value = JSON.stringify(boxArr);
-
-                coords = findMiddleOfBox(box, target.width, target.height, resX, resY);
-                xyArr.push(coords);
-                changingXY.value = JSON.stringify(xyArr);
-            }
-        } else {
-            // No restrictions - add to array
-            xyArr.push(coords);
-            changingXY.value = JSON.stringify(xyArr);
-
-            boxArr.push(box);
-            changingInput.value = JSON.stringify(boxArr);
-        }
-        // If associated with cycleTimer - send New Cycle EVENT
-        if (cycleTimer != null) {
-            document.getElementById("cycle_" + cycleTimer.value).click();
-        }
-    }
-
-    drawFields()
-}
-
-function findMiddleOfBox(boxNum, width, height, resX, resY) {
-    let boxHeight = height / resY;
-    let boxWidth = width / resX;
-    let boxX = (boxNum % resX) - 1;
-    if (boxX == -1) {
-        boxX = resX - 1
-    }
-    let boxY = Math.floor((boxNum - boxX + 1) / resX);
-    let x = Math.round((boxWidth * boxX) + (Math.floor(boxWidth / 2)));
-    let y = Math.round((boxHeight * boxY) + (Math.floor(boxHeight / 2)));
-    return x + "," + y
 }

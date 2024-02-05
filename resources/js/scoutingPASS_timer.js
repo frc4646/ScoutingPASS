@@ -5,7 +5,8 @@ function newCycle(event) {
     let cycleTime = inp.value
     inp.value = 0
 
-    if (cycleTime > 0) {
+    // if (cycleTime > 0)
+    {
         let cycleInput = document.getElementById("cycletime" + base);
         var tempValue = Array.from(JSON.parse(cycleInput.value));
         tempValue.push(cycleTime);
@@ -75,5 +76,33 @@ function timer(event) {
         clearInterval(intervalId);
         intervalIdField.value = '';
     }
+
+    drawFields();
+}
+
+function timerForceStart(event) {
+    let timerID = event.firstChild;
+    let tId = getIdBase(timerID.id)
+    timerStatus = document.getElementById("status" + tId);
+    startButton = document.getElementById("start" + tId);
+    intervalIdField = document.getElementById("intervalId" + tId);
+    var statusValue = timerStatus.value;
+    var intervalId = intervalIdField.value;
+    if (statusValue == 'stopped') {
+        timerStatus.value = 'started';
+        startButton.setAttribute("value", "Stop");
+
+        var intId = setInterval(() => {
+            if (document.getElementById("status" + tId).value == 'started') {
+                inp = document.getElementById("input" + tId);
+                var t = parseFloat(inp.value);
+                t += 0.1;
+                tTrunc = t.toFixed(1)
+                inp.value = tTrunc;
+            }
+        }, 100);
+        intervalIdField.value = intId;
+    }
+
     drawFields();
 }

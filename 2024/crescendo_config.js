@@ -40,12 +40,12 @@ var config_data = `
       "code": "r",
       "type": "robot",
       "choices": {
-        "r1": "Blue-1",
-        "b1": "Red-1<br>",
-        "r2": "Blue-2",
-        "b2": "Red-2<br>",
-        "r3": "Blue-3",
-        "b3": "Red-3"
+        "b1": "Blue-1",
+        "r1": "Red-1<br>",
+        "b2": "Blue-2",
+        "r2": "Red-2<br>",
+        "b3": "Blue-3",
+        "r3": "Red-3"
       },
       "required":"true"
     },
@@ -87,7 +87,7 @@ var config_data = `
       "toggleClick": "true",
       "dimensions": "9 5",
       "allowableResponses": "2 5 8 11 14 17 20 23 26 32 41",
-      "shape": "circle 30 black orange true",
+      "shape": "circle 25 black orange true",
       "width": "full"
     }
   ],
@@ -114,6 +114,22 @@ var config_data = `
         "x": "Not Attempted"
       },
       "defaultValue": "x"
+    },
+    { "name": "Cycle Timer",
+      "code": "tct",
+      "type": "cycle",
+      "autoStart": "true",
+      "hideControls": "true"
+    },
+    { "name": "Shooting Locations",
+      "code": "tsl",
+      "type": "clickable_image",
+      "filename": "2024/field_image.png",
+      "toggleClick": "false",
+      "dimensions": "9 5",
+      "shape": "circle 15 black orange true",
+      "width": "full",
+      "cycleTimer": "tct"
     }
   ],
   "endgame": [
@@ -194,9 +210,10 @@ var config_data = `
     },
     { "name": "Comments",
       "code": "co",
-      "type": "text",
-      "size": 15,
-      "maxSize": 55
+      "type": "text_area",
+      "cols": 30,
+      "rows": 3,
+      "maxSize": 300
     }
   ]
 }`;
