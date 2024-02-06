@@ -62,10 +62,12 @@ var config_data = `
       "clickRestriction": "one",
       "dimensions": "9 5",
       "allowableResponses": "1 9 10 18 19 27 28 36 37 45",
-      "shape": "circle 8 black red true",
+      "shape": "circle 20 black red true",
       "width": "full"
     }
   ],
+
+  
   "auton": [
     { "name": "Amp Scores",
       "code": "aas",
@@ -79,12 +81,6 @@ var config_data = `
       "code": "asm",
       "type": "counter"
     },
-    { "name": "Note Pickup Zone",
-      "code": "anpz",
-      "type": "clickable_image",
-      "filename": "2024/field_image.png",
-      "shape": "circle 5 black red true"
-    },
     { "name": "Auto Notes",
       "code": "an",
       "type": "clickable_image",
@@ -97,6 +93,8 @@ var config_data = `
       "width": "full"
     }
   ],
+
+
   "teleop": [
     { "name": "Amp Scores",
       "code": "tas",
@@ -146,15 +144,14 @@ var config_data = `
       "cycleTimer": "tct"
     }
   ],
+
+
   "endgame": [
-    { "name": "Final Status",
+    { "name": "Climb the Chain",
       "code": "fs",
       "type":"radio",
       "choices": {
-        "p": "Parked<br>",
-        "o": "Onstage<br>",
-        "s": "Onstage (Spotlit)<br>",
-        "h": "Harmony<br>",
+        "s": "Success<br>",
         "a": "Attempted but failed<br>",
         "x": "Not attempted"
       },
@@ -162,45 +159,22 @@ var config_data = `
     },
     { "name": "Note in Trap",
       "code": "nit",
+      "type": "radio",
+      "choices": {
+        "s2": "Success<br>",
+        "a2": "Attempted but failed<br>",
+        "x2": "Not attempted"
+      },
+      "defaultValue": "x2"
+    },
+    { "name": "Spotlight (Human Player)",
+      "code": "eshp",
       "type": "bool"
     }
   ],
+
+
   "postmatch": [
-    { "name": "Driver Skill",
-      "code": "ds",
-      "type": "radio",
-      "choices": {
-        "n": "Not Effective<br>",
-        "a": "Average<br>",
-        "v": "Very Effective<br>",
-        "x": "Not Observed"
-      },
-      "defaultValue": "x"
-    },
-    { "name": "Defense Rating",
-      "code": "dr",
-      "type": "radio",
-      "choices": {
-        "b": "Below Average<br>",
-        "a": "Average<br>",
-        "g": "Good<br>",
-        "e": "Excellent<br>",
-        "x": "Did not play defense"
-      },
-      "defaultValue": "x"
-    },
-    { "name": "Speed Rating",
-      "code": "sr",
-      "type": "radio",
-      "choices": {
-        "1": "1 (slow)<br>",
-        "2": "2<br>",
-        "3": "3<br>",
-        "4": "4<br>",
-        "5": "5 (fast)"
-      },
-      "defaultValue":"3"
-    },
     { "name": "Died/Immobilized",
       "code": "die",
       "type": "bool"
