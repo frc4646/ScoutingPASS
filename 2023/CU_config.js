@@ -1,21 +1,20 @@
 var config_data = `
 {
-  "dataFormat": "kvs",
   "title": "Scouting PASS 2023",
-  "page_title": "Charged Up",
+  "page_title": "4646 Scouting app",
   "checkboxAs": "10",
   "prematch": [
     { "name": "Scouter Initials",
       "code": "s",
       "type": "scouter",
       "size": 5,
-      "maxSize": 5,
+      "maxSize": 10,
       "required": "true"
     },
     { "name": "Event",
       "code": "e",
       "type": "event",
-      "defaultValue": "2023tnkn",
+      "defaultValue": "2023oktu",
       "required": "true",
       "disabled": "true"
     },
@@ -41,12 +40,12 @@ var config_data = `
       "code": "r",
       "type": "robot",
       "choices": {
-        "r1": "Red-1",
-        "b1": "Blue-1<br>",
-        "r2": "Red-2",
-        "b2": "Blue-2<br>",
-        "r3": "Red-3",
-        "b3": "Blue-3"
+        "red1": "Red-1",
+        "blue1": "Blue-1<br>",
+        "red2": "Red-2",
+        "blue2": "Blue-2<br>",
+        "red3": "Red-3",
+        "blue3": "Blue-3"
       },
       "required":"true"
     },
@@ -61,7 +60,6 @@ var config_data = `
       "type": "clickable_image",
       "filename": "2023/field_image.png",
       "clickRestriction": "one",
-      "allowableResponses": "2 3 4 9 10 11 14 15 16 21 22 23 26 27 28 33 34 35 38 39 46 47",
       "shape": "circle 5 black red true"
     }
   ],
@@ -73,13 +71,21 @@ var config_data = `
       "dimensions": "9 4",
       "clickRestriction": "onePerBox",
       "toggleClick": "true",
-      "showFlip": "true",
+      "showFlip": "false",
       "showUndo": "false",
-      "shape": "circle 12 black red true"
+      "shape": "circle 12 black blue true"
     },
-    { "name": "Game Pieces attempted<br>(Scored and Missed)",
-      "code": "aa",
+    { "name": "Dropped Piece Count",
+      "code": "adc",
       "type": "counter"
+    },
+    { "name": "Crossed Cable",
+      "code": "acc",
+      "type": "bool"
+    },
+    { "name": "Crossed Charging Station",
+      "code": "acs",
+      "type": "bool"
     },
     { "name": "Mobility?",
       "code": "am",
@@ -89,8 +95,8 @@ var config_data = `
       "code": "ad",
       "type":"radio",
       "choices": {
-        "d": "Docked (not Engaged)<br>",
         "e": "Engaged<br>",
+        "d": "Docked (not Engaged)<br>",
         "a": "Attempted but failed<br>",
         "x": "Not attempted"
       },
@@ -109,12 +115,24 @@ var config_data = `
       "showUndo": "false",
       "shape": "circle 12 black red true"
     },
-    { "name": "Feeder Count<br>(Fed another bot)",
-      "code": "tfc",
+    { "name": "Dropped Piece Count",
+      "code": "tdc",
       "type": "counter"
     },
-    { "name": "Was Fed<br>Game Pieces",
+    { "name": "Links Scored",
+      "code": "ls",
+      "type": "counter"
+    }, 
+    { "name": "Penalties Earned",
+      "code": "pe",
+      "type": "counter"
+    },
+    { "name": "Pushed Game Pieces",
       "code": "wf",
+      "type": "bool"
+    },
+    { "name": "Played Defense?",
+      "code": "pdef",
       "type": "bool"
     },
     { "name": "Was Defended",
@@ -127,7 +145,13 @@ var config_data = `
     },
     { "name": "Smart Placement<br>(creates Links)",
       "code": "lnk",
-      "type": "bool"
+      "type": "radio",
+      "choices": {
+        "y": "Yes<br>",
+        "n": "No<br>",
+        "z": "Not Observed"
+      },
+        "defaultValue": "z"
     },
     { "name": "Floor Pickup",
       "code": "fpu",
@@ -139,43 +163,32 @@ var config_data = `
         "x": "Not Attempted"
       },
       "defaultValue": "x"
+    },  
+    { "name": "Human Player Stations Used",
+    "code": "hpsu",
+    "type": "radio",
+    "choices": {
+      "3": "Drop Station<br>",
+      "2": "Shelf Stattion<br>",
+      "1": "Both<br>",
+      "0": "None"
     },
-    { "name": "Substation Use",
-      "code": "sub",
-      "type": "radio",
-      "choices": {
-        "1": "Single<br>",
-        "2": "Double<br>",
-        "b": "Both<br>",
-        "x": "Not Attempted"
-      },
-      "defaultValue": "x"
-    }
+    "defaultValue": "0"
+  }
   ],
   "endgame": [
-    { "name": "Docking Timer",
-      "code": "dt",
-      "type": "timer"
-    },
+
     { "name": "Final Status",
       "code": "fs",
       "type":"radio",
       "choices": {
-        "p": "Parked<br>",
-        "d": "Docked (Not Engaged)<br>",
         "e": "Engaged<br>",
+        "d": "Docked (Not Engaged)<br>",
+        "p": "Parked<br>",
         "a": "Attempted but failed<br>",
-        "x": "Not attempted"
+        "x": "Not attempted<br>"
       },
       "defaultValue": "x"
-    },
-    { "name": "Total # of alliance<br>robots docked/engaged",
-      "code": "dn",
-      "type": "counter"
-    },
-    { "name": "Links Scored<br>(by alliance)",
-      "code": "ls",
-      "type": "counter"
     }
   ],
   "postmatch": [
@@ -183,24 +196,25 @@ var config_data = `
       "code": "ds",
       "type": "radio",
       "choices": {
-        "n": "Not Effective<br>",
-        "a": "Average<br>",
-        "v": "Very Effective<br>",
-        "x": "Not Observed"
+        "3": "Very Effective<br>",
+        "2": "Average<br>",
+        "1": "Not Effective<br>",
+        "0": "Not Observed<br>"
       },
-      "defaultValue": "x"
+      "defaultValue": "0"
     },
+
     { "name": "Defense Rating",
       "code": "dr",
       "type": "radio",
       "choices": {
-        "b": "Below Average<br>",
-        "a": "Average<br>",
-        "g": "Good<br>",
-        "e": "Excellent<br>",
-        "x": "Did not play defense"
+        "4": "Excellent<br>",
+        "3": "Good<br>",
+        "2": "Average<br>",
+        "1": "Below Average<br>",
+        "0": "Did not play defense<br>"
       },
-      "defaultValue": "x"
+      "defaultValue": "0"
     },
     { "name": "Speed Rating",
       "code": "sr",
@@ -222,20 +236,24 @@ var config_data = `
       "code": "tip",
       "type": "bool"
     },
-    { "name": "Dropped Cones (>2)",
-      "code": "dc",
-      "type": "bool"
-    },
+   
     { "name": "Make good<br>alliance partner?",
       "tooltip": "Would you want this robot on your alliance in eliminations?",
       "code": "all",
-      "type": "bool"
+      "type": "radio",
+      "choices": {
+        "y": "Yes<br>",
+        "n": "No<br>",
+        "s": "Not Sure" 
+      },
+      "required": "true"
     },
     { "name": "Comments",
       "code": "co",
       "type": "text",
       "size": 15,
-      "maxSize": 55
+      "maxSize": 500,
+      "defaultValue" : " "
     }
   ]
 }`;
