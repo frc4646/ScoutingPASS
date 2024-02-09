@@ -129,7 +129,7 @@ function onFieldClick(event) {
         } else if (clickRestriction == "one") {
             // Replace box and coords
             changingXY.value = JSON.stringify([coords]);
-            changingInput.value = JSON.stringify([box]);
+            changingInput.value = JSON.stringify([box]).replace('[', '').replace(']', ''); // remove [] for one clicks
         } else if (clickRestriction == "onePerBox") {
             // Add if box already not in box list/Array
             if (!boxArr.includes(box)) {

@@ -63,15 +63,15 @@ body {
 #teleop_table,
 #postmatch_table {
     font-family: -apple-system, BlinkMacSystemFont, Arial, Helvetica, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
-    font-size: 13px;
-    font-style: bold;
+    font-size: 11pt;
+    /* font-weight: bold; */
     letter-spacing: 1px;
     border-width: 4px;
 }
 
 .button {
     font-family: Alexis;
-    font-size: 16px;
+    font-size: 14pt;
 }
 
 #autonHeader,
@@ -136,7 +136,7 @@ h1 {
     text-align: center;
     border-style: groove;
     border-width: 2px;
-    font-size: 40px;
+    font-size: 28pt;
     padding: 10px;
     font-weight: 350;
 }
@@ -144,7 +144,7 @@ h1 {
 h2 {
     font-family: Alexis;
     text-align: center;
-    font-size: 30px;
+    font-size: 20pt;
     font-weight: 300;
     font-style: italic;
 }
@@ -214,6 +214,11 @@ input[type=button]  {
     min-width: 40px;
 }
 
+input[id^="plus"], 
+input[id^="minus"] {
+    font-size: 16pt;
+}
+
 .undoButton,
 .flipButton {
     font-family: Alexis;
@@ -265,6 +270,7 @@ h1 .even {
 table {
     border: 1px solid;
     width: 100%;
+    table-layout: fixed;
 }
 
 td {
@@ -272,20 +278,26 @@ td {
 }
 
 input {
-    font-size: 16px;
+    font-size: 12pt;
     font-family: Arial, Helvetica, sans-serif;
     color: black;
     background-color: white;
 }
 
 .title {
-    width: "50%";
+    width: 50%;
     text-align: right;
+    font-weight: bold;
 }
 
 .field {
-    width: "50%";
+    width: 50%;
     text-align: left;
+}
+
+.label {
+    width: 50%;
+    text-align: center;
 }
 
 .field label {
@@ -302,7 +314,7 @@ input {
     background-color: white;
 }
 
-#data {
+#data, #dataHeaders {
     font-family: 'Lucida Console', 'monospace';
     text-align: justify;
 }

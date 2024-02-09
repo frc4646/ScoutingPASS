@@ -1,3 +1,13 @@
+
+function addLabel(table, idx, data) {
+    var row = table.insertRow(idx);
+    var cell1 = row.insertCell(0);
+    cell1.classList.add("label");
+    cell1.setAttribute("colspan", 2);
+    cell1.innerHTML = data.text + '&nbsp;';
+    return idx + 1
+}
+
 function addTimer(table, idx, name, data) {
     var row = table.insertRow(idx);
     var cell1 = row.insertCell(0);
@@ -33,7 +43,7 @@ function addTimer(table, idx, name, data) {
         ct = document.createElement('input');
         ct.setAttribute("type", "text");
         ct.setAttribute("id", "display_" + data.code);
-        ct.setAttribute("width", "400px");
+        ct.style.width="300px";
         ct.setAttribute("value", "");
         ct.setAttribute("disabled", "");
         cell.appendChild(ct);
@@ -92,7 +102,7 @@ function addTimer(table, idx, name, data) {
     button1force.setAttribute("type", "button");
     button1force.setAttribute("onclick", "timerForceStart(this.parentElement)");
     button1force.setAttribute("value", "Start Force");
-    button1force.style.visibility = "hidden";
+    button1force.style.display = "none";
     cell.appendChild(button1force);
 
     let showControls = true;
@@ -108,7 +118,7 @@ function addTimer(table, idx, name, data) {
         button3.setAttribute("onclick", "newCycle(this.parentElement)");
         button3.setAttribute("value", "New Cycle");
         if (!showControls) {
-            button3.style.visibility = "hidden";
+            button3.style.display = "none";
         }
         cell.appendChild(button3);
         var button4 = document.createElement("input");
@@ -118,7 +128,7 @@ function addTimer(table, idx, name, data) {
         button4.setAttribute("value", "Undo");
         button4.setAttribute('style', "margin-left: 20px;");
         if (!showControls) {
-            button4.style.visibility = "hidden";
+            button4.style.display = "none";
         }
         cell.appendChild(button4);
     }
@@ -356,7 +366,7 @@ function addClickableImage(table, idx, name, data) {
     inp.setAttribute("value", "none");
     if (data.hasOwnProperty('allowableResponses')) {
         let responses = data.allowableResponses.split(' ').map(Number)
-        console.log(responses)
+        // console.log(responses)
         inp.setAttribute("value", responses);
     }
     cell.appendChild(inp);
@@ -716,7 +726,9 @@ function addElement(table, idx, data) {
         idx = addText(table, idx, name, err);
         return
     }
-    if (type == 'counter') {
+    if (type == 'label') {
+        idx = addLabel(table, idx, data);
+    } else if (type == 'counter') {
         idx = addCounter(table, idx, name, data);
     } else if ((data.type == 'scouter') || (data.type == 'event') || (data.type == 'text')) {
         idx = addText(table, idx, name, data);
@@ -739,7 +751,6 @@ function addElement(table, idx, data) {
     }
     return idx
 }
-
 
 /**
  * adds to the number in innerHTML of the value tag.
@@ -767,6 +778,7 @@ function counter(element, step) {
 
     // If associated with cycleTimer - send New Cycle EVENT
     if (step >= 0 && cycleTimer != null) {
+        document.getElementById("startForce_" + cycleTimer.value).click();
         document.getElementById("cycle_" + cycleTimer.value).click();
     }
 }
