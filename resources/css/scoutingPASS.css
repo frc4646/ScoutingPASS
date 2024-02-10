@@ -14,47 +14,57 @@ body {
     padding: 0;
     color: white;
     background-color: black;
+    background: url(stars.gif);
 }
 
 /** set page colors here **/
 #prematch {
     background-color: black;
     color: white;
+    background: url(stars.gif)
 }
 #prematch_table{
     border-color: white;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 #auton {
-    background-color: black;
     color: white;
+    background: url(stars.gif)
 }
 #auton_table{
     border-color: white;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 #teleop {
     background-color: black;
     color: white;
+    background: url(stars.gif)
 }
 #teleop_table {
     border-color: white;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 #endgame{
     background-color: black;
     color: white;
+    background: url(stars.gif)
 }
 #endgame_table{
     border-color: white;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 #postmatch {
     background-color: black;
     color: white;
+    background: url(stars.gif)
 }
 #postmatch_table {
     border-color: white;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 #prematch_table,
@@ -79,15 +89,18 @@ body {
 #teleopHeader1,
 #teleopHeader2 {
     border-width: 4px;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 #postmatchHeader {
     border-width: 4px;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 #prematchHeader1,
 #prematchHeader2 {
     border-width: 4px;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 #qrHeader1,
