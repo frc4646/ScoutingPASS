@@ -5,7 +5,7 @@
 
 var enableGoogleSheets = false;
 var pitScouting = false;
-var checkboxAs = 'YN';
+var checkboxAs = 'TrueFalse';
 
 // Options
 var options = {
@@ -172,6 +172,10 @@ function getData(dataFormat) {
     case '10':
       checkedChar = '1';
       uncheckedChar = '0';
+      break;
+    case 'TrueFalse':
+      checkedChar = 'True';
+      uncheckedChar = 'False';
       break;
     default:
       var checkedChar = 'Y';
