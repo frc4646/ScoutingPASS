@@ -37,6 +37,10 @@ function swipePage(increment) {
             slide += increment;
             window.scrollTo(0, 0);
             slides[slide].style.display = "table";
+            // hack for starting cycle timer in telop for 2024
+            if (slides[slide].id == 'teleop') {
+                timerForceStart(document.getElementById('startForce_tct').parentNode)
+            }
             document.getElementById('data').innerHTML = "";
             document.getElementById('copyButton').setAttribute('value', 'Copy Data');
             document.getElementById('copyHeadersButton').setAttribute('value', 'Copy Headers');
