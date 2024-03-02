@@ -26,12 +26,14 @@ function qr_regenerate() {
     }
 
     // Get data
-    data = getData(dataFormat)
+    data = getData(dataFormat);
 
     // Regenerate QR Code
-    qr.makeCode(data)
+    qr.makeCode(data);
 
-    updateQRHeader()
+    updateQRHeader();
+    
+    saveDataToStorage();
     return true
 }
 

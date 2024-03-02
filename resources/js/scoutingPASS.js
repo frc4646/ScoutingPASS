@@ -439,6 +439,54 @@ function copyHeaders() {
   document.getElementById('copyHeadersButton').setAttribute('value', 'Copied');
 }
 
+
+function clearStorageData() {
+  if (confirm("Delete all stored matches?")) {
+    localStorage.clear();
+    document.getElementById('prevDataTable').innerHTML = "";
+  }
+}
+
+function createPrevDataTable() {
+  prevData = document.getElementById('prevDataTable');
+  prevData.innerHTML = "";
+  
+  var keys = []
+
+  for (let i = 0; i < localStorage.length; i++)
+  {
+    keys.push(localStorage.key(i));
+  }
+  keys.sort();
+
+  for (var i=0; i<keys.length; i++) {
+    var data = localStorage.getItem(keys[i]);
+    var row = prevData.insertRow(0);
+    var cell1 = row.insertCell(0);
+    cell1.innerHTML = data + '&nbsp;';
+    cell1.setAttribute('width', '80%');
+
+    var cell2 = row.insertCell(1);
+    const newButton = document.createElement('button');
+    newButton.textContent = 'Show QR';
+    newButton.addEventListener('click', () => {
+      qr.makeCode(data);
+      document.getElementById("display_qr-info").textContent = data;
+    });
+    cell2.appendChild(newButton);
+  }
+}
+
+function saveDataToStorage() {
+  var key = document.getElementById("input_e").value + "_" + document.getElementById("input_m").value + "_" + getRobot()
+
+  data = getData(dataFormat);
+
+  localStorage.setItem(key, data);
+  createPrevDataTable();
+}
+
+
 window.onload = function () {
   let ret = configure();
   if (ret != -1) {
@@ -457,4 +505,6 @@ window.onload = function () {
       setUpGoogleSheets();
     }
   }
+
+  createPrevDataTable();
 };

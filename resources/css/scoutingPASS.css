@@ -192,7 +192,8 @@ h2 {
 .clearForm,
 .submitForm,
 #displayButton,
-#copyButton {
+#copyButton,
+#clearStoredDataButton {
     font-family: Alexis;
     padding: 10px;
     background-color: rgb(151, 199, 240);
@@ -330,4 +331,9 @@ input {
 #data, #dataHeaders {
     font-family: 'Lucida Console', 'monospace';
     text-align: justify;
+}
+
+#prevDataTable 
+{
+    margin: 20px;
 }
