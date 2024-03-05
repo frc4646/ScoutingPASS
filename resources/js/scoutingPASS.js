@@ -405,7 +405,10 @@ function updateMatchStart(event) {
   }
   if (event.target.id == "input_m") {
     if (getRobot() != "" && typeof getRobot()) {
-      document.getElementById("input_t").value = getCurrentTeamNumberFromRobot().replace("frc", "");
+      try {
+        document.getElementById("input_t").value = getCurrentTeamNumberFromRobot().replace("frc", "");
+      } catch (error) {
+      }
       onTeamnameChange();
     }
   }
@@ -460,7 +463,7 @@ function createPrevDataTable() {
   keys.sort();
 
   for (var i=0; i<keys.length; i++) {
-    var data = localStorage.getItem(keys[i]);
+    let data = localStorage.getItem(keys[i]);
     var row = prevData.insertRow(0);
     var cell1 = row.insertCell(0);
     cell1.innerHTML = data + '&nbsp;';
