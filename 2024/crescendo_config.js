@@ -15,7 +15,7 @@ var config_data = `
     { "name": "Event",
       "code": "e",
       "type": "event",
-      "defaultValue": "2023tnkn",
+      "defaultValue": "2024mose",
       "required": "true"
     },
     { "name": "Match Level",
@@ -24,7 +24,8 @@ var config_data = `
       "choices": {
         "qm": "Quals<br>",
         "sf": "Semifinals<br>",
-        "f": "Finals"
+        "f": "Finals<br>",
+        "p": "Practice"
       },
       "defaultValue": "qm",
       "required": "true"
@@ -74,7 +75,7 @@ var config_data = `
       "code": "aas",
       "type": "counter"
     },
-    { "name": "Speaker Scores",
+    { "name": "Speaker Shots Made",
       "code": "ass",
       "type": "counter"
     },
@@ -103,6 +104,9 @@ var config_data = `
       "autoStart": "true",
       "hideControls": "true"
     },
+    { "type": "label",
+      "text": "Only record shots made on the field map"
+    },
     { "name": "Speaker Shots Made",
       "code": "tsl",
       "type": "clickable_image",
@@ -121,21 +125,9 @@ var config_data = `
       "code": "tas",
       "type": "counter"
     },
-    { "name": "Times Amplified",
-      "code": "tta",
-      "type": "counter"
-    },
     { "name": "Dropped Notes",
       "code": "tdn",
       "type": "counter"
-    },
-    { "name": "Pickup From Source",
-      "code": "tpus",
-      "type": "bool"
-    },
-    { "name": "Pickup From Floor",
-      "code": "tpuf",
-      "type": "bool"
     },
     { "name": "Played Defense",
       "code": "tpd",
@@ -164,10 +156,6 @@ var config_data = `
         "x": "Not attempted"
       },
       "defaultValue": "x"
-    },
-    { "name": "Spotlight (Human Player)",
-      "code": "eshp",
-      "type": "bool"
     }
   ],
 
