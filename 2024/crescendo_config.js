@@ -15,7 +15,7 @@ var config_data = `
     { "name": "Event",
       "code": "e",
       "type": "event",
-      "defaultValue": "2024mose",
+      "defaultValue": "2024iacf",
       "required": "true"
     },
     { "name": "Match Level",
