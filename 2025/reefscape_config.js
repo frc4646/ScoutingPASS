@@ -58,9 +58,10 @@ var config_data = `
     { "name": "Auto Start Position",
       "code": "as",
       "type": "clickable_image",
-      "filename": "2025/field_image.png",
+      "filename": "2025/half_field.png",
       "clickRestriction": "one",
-      "allowableResponses": "6 7 18 19 30 31 42 43 54 55 66 67",
+      "dimensions": "6 6",
+      "allowableResponses": "1 7 13 19 25 31",
       "shape": "circle 5 black red true"
     }
   ],
@@ -69,47 +70,51 @@ var config_data = `
       "code": "al",
       "type": "bool"
     },
-    { "name": "Coral L1",
-      "code": "ac1",
-      "type": "counter"
-    },
-    { "name": "Coral L2",
-      "code": "ac2",
+    { "name": "Coral L4",
+      "code": "ac4",
       "type": "counter"
     },
     { "name": "Coral L3",
       "code": "ac3",
       "type": "counter"
     },
-    { "name": "Coral L4",
-      "code": "ac4",
+    { "name": "Coral L2",
+      "code": "ac2",
       "type": "counter"
+    },
+    { "name": "Coral L1",
+      "code": "ac1",
+      "type": "counter"
+    },
+    { "name": "Coral Missed",
+     "code": "acm",
+     "type": "counter"
     },
     { "name": "Processor Score",
       "code": "aps",
       "type": "counter"
-    },
-    { "name": "Net Score",
-      "code": "ans",
-      "type": "counter"
     }
   ],
   "teleop": [
-    { "name": "Coral L1",
-      "code": "tc1",
-      "type": "counter"
-    },
-    { "name": "Coral L2",
-      "code": "tc2",
+    { "name": "Coral L4",
+      "code": "tc4",
       "type": "counter"
     },
     { "name": "Coral L3",
       "code": "tc3",
       "type": "counter"
     },
-    { "name": "Coral L4",
-      "code": "tc4",
+    { "name": "Coral L2",
+      "code": "tc2",
       "type": "counter"
+    },
+    { "name": "Coral L1",
+      "code": "tc1",
+      "type": "counter"
+    },
+    { "name": "Dropped Coral",
+      "code": "tdc",
+      "type": "counter<br>"
     },
     { "name": "Processor Score",
       "code": "tps",
@@ -119,8 +124,12 @@ var config_data = `
       "code": "tns",
       "type": "counter"
     },
-    { "name": "Pickup From",
-      "code": "tpu",
+    { "name": "Dropped Algae",
+      "code": "tda",
+      "type": "counter"
+    },
+    { "name": "Coral Pickup From",
+      "code": "tcp",
       "type": "radio",
       "choices": {
         "s": "Coral Station<br>",
@@ -130,22 +139,25 @@ var config_data = `
       },
       "defaultValue": "x"
     },
-    { "name": "Scored in Opponent Processor",
-      "code": "opp",
-      "type": "bool"
+    { "name": "Algae Pickup From",
+      "code": "tap",
+      "type": "radio",
+      "choices": {
+        "r": "Reef<br>",
+        "f": "Floor<br>",
+        "b": "Both<br>",
+        "x": "Not Attempted"
+      },
+      "defaultValue": "x"
     }
   ],
   "endgame": [
-    { "name": "Barge Timer",
-      "code": "ebt",
-      "type": "timer"
-    },
-    { "name": "Final Status",
+    { "name": "Final Robot Status",
       "code": "efs",
       "type":"radio",
       "choices": {
         "bp": "Parked<br>",
-        "ba": "Parked, failed climb<br>",
+        "ba": "Parked/Failed Climb<br>",
         "bs": "Shallow Cage<br>",
         "bd": "Deep Cage<br>",
         "x": "Not attempted"
@@ -154,17 +166,6 @@ var config_data = `
     }
   ],
   "postmatch": [
-    { "name": "Attained Coopertition Pt",
-      "code": "cop",
-      "type": "bool"
-    },
-    { "name": "Algae Left in Reef",
-      "code": "alr",
-      "type": "number",
-      "min": 0,
-      "max": 9,
-      "defaultValue": 0
-    },
     { "name": "Driver Skill",
       "code": "ds",
       "type": "radio",
@@ -188,19 +189,7 @@ var config_data = `
       },
       "defaultValue": "x"
     },
-    { "name": "Speed Rating",
-      "code": "sr",
-      "type": "radio",
-      "choices": {
-        "1": "1 (slow)<br>",
-        "2": "2<br>",
-        "3": "3<br>",
-        "4": "4<br>",
-        "5": "5 (fast)"
-      },
-      "defaultValue":"3"
-    },
-    { "name": "Died/Immobilized",
+    { "name": "Died/Didn't Show",
       "code": "die",
       "type": "bool"
     },
@@ -208,24 +197,11 @@ var config_data = `
       "code": "tip",
       "type": "bool"
     },
-    { "name": "Dropped Coral (>2)",
-      "code": "dc",
-      "type": "bool"
-    },
-    { "name": "Dropped Algae (>2)",
-      "code": "da",
-      "type": "bool"
-    },
-    { "name": "Make good<br>alliance partner?",
-      "tooltip": "Would you want this robot on your alliance in eliminations?",
-      "code": "all",
-      "type": "bool"
-    },
     { "name": "Comments",
       "code": "co",
       "type": "text",
       "size": 15,
-      "maxSize": 55
+      "maxSize": 200
     }
   ]
 }`;
