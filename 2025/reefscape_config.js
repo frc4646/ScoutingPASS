@@ -70,36 +70,28 @@ var config_data = `
       "code": "al",
       "type": "bool"
     },
-    { "name": "Coral L1",
-      "code": "ac1",
-      "type": "counter"
-    },
-    { "name": "Coral L2",
-      "code": "ac2",
+    { "name": "Coral L4",
+      "code": "ac4",
       "type": "counter"
     },
     { "name": "Coral L3",
       "code": "ac3",
       "type": "counter"
     },
-    { "name": "Coral L4",
-      "code": "ac4",
+    { "name": "Coral L2",
+      "code": "ac2",
       "type": "counter"
     },
-    { "name": "Auto Scoring Position",
-      "code": "asp",
-      "type": "clickable_image",
-      "filename": "2025/reef.png",
-      "dimensions": "6 6",
-      "allowableResponses": "1 2 3 4 5 6 7 8 9 10 11 12 13 14 17 18 19 20 23 24 25 26 27 28 29 30 31 32 33 34 35 36",
-      "shape": "circle 5 black red true"
+    { "name": "Coral L1",
+      "code": "ac1",
+      "type": "counter"
+    },
+    { "name": "Coral Missed",
+      "code": "acm",
+      "type": "counter"
     },
     { "name": "Processor Score",
       "code": "aps",
-      "type": "counter"
-    },
-    { "name": "Net Score",
-      "code": "ans",
       "type": "counter"
     }
   ],
