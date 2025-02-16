@@ -116,7 +116,7 @@ var config_data = `
       "code": "tcp",
       "type": "radio",
       "choices": {
-        "s": "Coral Station<br>",
+        "cs": "Coral Station<br>",
         "f": "Floor<br>",
         "b": "Both<br>",
         "x": "Not Attempted"
@@ -139,7 +139,7 @@ var config_data = `
       "code": "tap",
       "type": "radio",
       "choices": {
-        "s": "Coral Station<br>",
+        "cs": "Coral Station<br>",
         "f": "Floor<br>",
         "b": "Both<br>",
         "x": "Not Attempted"
@@ -152,10 +152,10 @@ var config_data = `
       "code": "efs",
       "type":"radio",
       "choices": {
-        "bp": "Parked<br>",
-        "ba": "Parked/Failed Climb<br>",
-        "bs": "Shallow Cage<br>",
-        "bd": "Deep Cage<br>",
+        "ep": "Parked<br>",
+        "efc": "Parked/Failed Climb<br>",
+        "esc": "Shallow Cage<br>",
+        "edc": "Deep Cage<br>",
         "x": "Not attempted"
       },
       "defaultValue": "x"
