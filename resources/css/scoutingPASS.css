@@ -60,7 +60,7 @@ html, body{
 }
 
 #qrHeader1, #qrHeader2 {
-    color: black;
+    color: white;
 }
 
 .field-image {
@@ -165,7 +165,6 @@ h2{
     font-family: Alexis;
     background-color: rgb(240, 141, 141);
     padding: 10px;
-    color: white;
 }
 
 .undoButton, .flipButton {
