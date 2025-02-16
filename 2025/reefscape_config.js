@@ -96,20 +96,35 @@ var config_data = `
     }
   ],
   "teleop": [
-    { "name": "Coral L1",
-      "code": "tc1",
-      "type": "counter"
-    },
-    { "name": "Coral L2",
-      "code": "tc2",
+    { "name": "Coral L4",
+      "code": "tc4",
       "type": "counter"
     },
     { "name": "Coral L3",
       "code": "tc3",
       "type": "counter"
     },
-    { "name": "Coral L4",
-      "code": "tc4",
+    { "name": "Coral L2",
+      "code": "tc2",
+      "type": "counter"
+    },
+    { "name": "Coral L1",
+      "code": "tc1",
+      "type": "counter"
+    },
+    { "name": "Coral Pickup From",
+      "code": "tcp",
+      "type": "radio",
+      "choices": {
+        "s": "Coral Station<br>",
+        "f": "Floor<br>",
+        "b": "Both<br>",
+        "x": "Not Attempted"
+      },
+      "defaultValue": "x"
+    },
+    { "name": "Removed Algae from Reef",
+      "code": "tra",
       "type": "counter"
     },
     { "name": "Processor Score",
@@ -120,8 +135,8 @@ var config_data = `
       "code": "tns",
       "type": "counter"
     },
-    { "name": "Pickup From",
-      "code": "tpu",
+    { "name": "Algae Pickup From",
+      "code": "tap",
       "type": "radio",
       "choices": {
         "s": "Coral Station<br>",
@@ -130,10 +145,6 @@ var config_data = `
         "x": "Not Attempted"
       },
       "defaultValue": "x"
-    },
-    { "name": "Scored in<br>Opponent<br>Processor",
-      "code": "opp",
-      "type": "bool"
     }
   ],
   "endgame": [
