@@ -139,7 +139,7 @@ var config_data = `
       "code": "tap",
       "type": "radio",
       "choices": {
-        "cs": "Coral Station<br>",
+        "cs": "Coral Reef<br>",
         "f": "Floor<br>",
         "b": "Both<br>",
         "x": "Not Attempted"
