@@ -200,9 +200,8 @@ var config_data = `
     },
     { "name": "Comments",
       "code": "co",
-      "type": "text_area",
-      "cols": 5,
-      "rows": 5,
+      "type": "text",
+      "size": 30,
       "maxSize": 200
     }
   ]
