@@ -15,7 +15,7 @@ var config_data = `
     { "name": "Event",
       "code": "e",
       "type": "event",
-      "defaultValue": "2025mose",
+      "defaultValue": "2025iacf",
       "required": "true"
     },
     { "name": "Match Level",
@@ -60,8 +60,8 @@ var config_data = `
       "type": "clickable_image",
       "filename": "2025/half_field.png",
       "clickRestriction": "one",
-      "dimensions": "6 6",
-      "allowableResponses": "1 7 13 19 25 31",
+      "dimensions": "3 3",
+      "allowableResponses": "1 4 7",
       "shape": "circle 5 black red true"
     }
   ],
