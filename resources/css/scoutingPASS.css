@@ -6,73 +6,117 @@
     src: url("../fonts/alexisv3.ttf") format('truetype');
 }
 
-html, body{
+html,
+body {
     height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
     color: white;
+    background-color: black;
     background: url(stars.gif);
 }
 
-#prematch_table, #postmatch_table {
-
-    font-family : -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
-    text-align: center;
+/** set page colors here **/
+#prematch {
+    background-color: black;
     color: white;
-    font-size: 13px;
-    font-style: bold;
-    letter-spacing: 1px;
-    border-width: 4px;
+    background: url(stars.gif)
+}
+#prematch_table{
     border-color: white;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
-#auton_table, #endgame_table, #teleop_table {
-    font-family : -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+#auton {
     color: white;
-    font-size: 13px;
-    font-style: bold;
+    background: url(stars.gif)
+}
+#auton_table{
+    border-color: white;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+#teleop {
+    background-color: black;
+    color: white;
+    background: url(stars.gif)
+}
+#teleop_table {
+    border-color: white;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+#endgame{
+    background-color: black;
+    color: white;
+    background: url(stars.gif)
+}
+#endgame_table{
+    border-color: white;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+#postmatch {
+    background-color: black;
+    color: white;
+    background: url(stars.gif)
+}
+#postmatch_table {
+    border-color: white;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+#prematch_table,
+#auton_table,
+#endgame_table,
+#teleop_table,
+#postmatch_table {
+    font-family: -apple-system, BlinkMacSystemFont, Arial, Helvetica, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+    font-size: 11pt;
+    /* font-weight: bold; */
     letter-spacing: 1px;
     border-width: 4px;
-    border-color: white;
 }
 
 .button {
     font-family: Alexis;
-    font-size: 16px;
+    font-size: 14pt;
 }
 
-#autonHeader, #endgameHeader, #teleopHeader1, #teleopHeader2{
-    color: white;
-    border-color: white;
+#autonHeader,
+#endgameHeader,
+#teleopHeader1,
+#teleopHeader2 {
     border-width: 4px;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
-#postmatchHeader{
+#postmatchHeader {
     border-width: 4px;
-    border-color: white;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
-#prematchHeader1, #prematchHeader2{
-    color: white;
-    border-color: white;
+#prematchHeader1,
+#prematchHeader2 {
     border-width: 4px;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
-#qrHeader1, #qrHeader2 {
-    color: white;
+#qrHeader1,
+#qrHeader2 {
 }
 
 .field-image {
     margin: 2vw;
 }
 
-.field-image-src{
+.field-image-src {
     background-position: center;
     border: 1px solid;
 }
 
-.main-panel{
+.main-panel {
     display: none;
     height: 100%;
     min-height: 100%;
@@ -80,94 +124,117 @@ html, body{
     position: absolute;
     left: 0;
     top: 0;
-    color: white;
-    background: url(stars.gif);
-    font-family : -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+    font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
     text-align: justify;
 }
 
-#prematch{
+#prematch {
     display: table;
 }
 
-#auton{
+#auton {}
+
+#teleop {}
+
+#endgame {}
+
+#postmatch {}
+
+#qr-code {
+    text-align: center;
 }
 
-#teleop{
-}
-
-#endgame{
-}
-
-#postmatch{
-}
-
-#qr-code{
-  text-align: center;
-  color: black;
-}
-
-h1{
+h1 {
     font-family: Alexis;
     text-align: center;
     border-style: groove;
-    border-color: white;
     border-width: 2px;
-    font-size: 40px;
+    font-size: 28pt;
     padding: 10px;
     font-weight: 350;
 }
 
-#page2, #page4 {
-    color: black;
-}
-
-h2{
+h2 {
     font-family: Alexis;
     text-align: center;
-    font-size: 30px;
+    font-size: 20pt;
     font-weight: 300;
     font-style: italic;
 }
 
-.match-label{
+.match-label {
     text-align: center;
 }
 
-.half-button-l{
+.half-button-l {
     width: 48%;
     margin: 1vw;
     height: 100%;
-    font: roboto;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-.half-button-r{
+.half-button-r {
     flex-grow: 1;
     height: 100%;
     width: 48%;
     margin: 1vw;
-    font: roboto;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-.half-button-container{
+.half-button-container {
     display: flex;
 }
 
-#nextButton1, #nextButton2, #nextButton9, #nextButton10, .clearForm, .submitForm, #displayButton, #copyButton {
+#nextButton1,
+#nextButton2,
+#nextButton9,
+#nextButton10,
+.clearForm,
+.submitForm,
+#displayButton,
+#copyButton,
+#clearStoredDataButton {
     font-family: Alexis;
     padding: 10px;
-    background-color: rgb(240, 141, 141);
+    background-color: rgb(151, 199, 240);
     text-decoration: none;
     display: inline-block;
 }
 
-#nextButton3, #nextButton4, #nextButton5, #nextButton6, #nextButton7, #nextButton8 {
+#nextButton3,
+#nextButton4,
+#nextButton5,
+#nextButton6,
+#nextButton7,
+#nextButton8 {
     font-family: Alexis;
-    background-color: rgb(240, 141, 141);
+    background-color: black;
     padding: 10px;
+    color: white;
 }
 
-.undoButton, .flipButton {
+#displayHeadersButton,
+#copyHeadersButton {
+    font-family: Alexis;
+    padding: 10px;
+    background-color: rgb(151, 240, 218);
+    text-decoration: none;
+    display: inline-block;
+}
+
+input[type=button]  {
+    font-family: Alexis;
+    padding: 10px;
+    min-width: 40px;
+}
+
+input[id^="plus"], 
+input[id^="minus"] {
+    font-size: 16pt;
+}
+
+.undoButton,
+.flipButton {
     font-family: Alexis;
     background-color: black;
     padding: 10px;
@@ -175,20 +242,29 @@ h2{
     margin-left: 20px;
 }
 
-#prevButton7, #prevButton8, #prevButton9{
+#prevButton7,
+#prevButton8,
+#prevButton9 {
     font-family: Alexis;
-    background-color: rgb(240, 141, 141);
+    background-color: rgb(151, 199, 240);
     padding: 10px;
 }
 
-#prevButton1, #prevButton2, #prevButton3, #prevButton4, #prevButton5, #prevButton6{
+#prevButton1,
+#prevButton2,
+#prevButton3,
+#prevButton4,
+#prevButton5,
+#prevButton6 {
     font-family: Alexis;
-    background-color: rgb(240, 141, 141);
+    background-color: black;
     padding: 10px;
+    color: white;
+
 }
 
-#prematch_table{
-    font: Alexis;
+#prematch_table {
+    font-family: Alexis;
     text-align: center;
 }
 
@@ -206,8 +282,9 @@ h1 .even {
 }
 
 table {
-    border: 1px solid black;
+    border: 1px solid;
     width: 100%;
+    table-layout: fixed;
 }
 
 td {
@@ -215,20 +292,34 @@ td {
 }
 
 input {
-    font-size: 16px;
-    font: roboto;
+    font-size: 12pt;
+    font-family: Arial, Helvetica, sans-serif;
     color: black;
     background-color: white;
 }
 
 .title {
-    width: "50%";
+    width: 50%;
     text-align: right;
+    font-weight: bold;
 }
 
 .field {
-    width: "50%";
+    width: 50%;
     text-align: left;
+}
+
+.label {
+    width: 50%;
+    text-align: center;
+}
+
+.field label {
+    padding-right: 10px;
+}
+
+.field input {
+    margin-bottom: 10px;
 }
 
 #qr-table {
@@ -237,7 +328,12 @@ input {
     background-color: white;
 }
 
-#data {
-    font-family:'Lucida Console', 'monospace';
+#data, #dataHeaders {
+    font-family: 'Lucida Console', 'monospace';
     text-align: justify;
+}
+
+#prevDataTable 
+{
+    margin: 20px;
 }
