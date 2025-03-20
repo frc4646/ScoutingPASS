@@ -196,7 +196,7 @@ h2 {
 #clearStoredDataButton {
     font-family: Alexis;
     padding: 10px;
-    background-color: rgb(151, 199, 240);
+    background-color: rgb(240, 141, 141);
     text-decoration: none;
     display: inline-block;
 }
@@ -217,7 +217,7 @@ h2 {
 #copyHeadersButton {
     font-family: Alexis;
     padding: 10px;
-    background-color: rgb(151, 240, 218);
+    background-color: rgb(240, 141, 141);
     text-decoration: none;
     display: inline-block;
 }
@@ -246,7 +246,7 @@ input[id^="minus"] {
 #prevButton8,
 #prevButton9 {
     font-family: Alexis;
-    background-color: rgb(151, 199, 240);
+    background-color: rgb(240, 141, 141);
     padding: 10px;
 }
 
