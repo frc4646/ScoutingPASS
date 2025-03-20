@@ -60,7 +60,7 @@ var config_data = `
       "type": "clickable_image",
       "filename": "2025/half_field.png",
       "clickRestriction": "one",
-      "dimensions": "6 6",
+      "dimensions": "3 3",
       "allowableResponses": "1 4 7",
       "shape": "circle 5 black red true"
     }
