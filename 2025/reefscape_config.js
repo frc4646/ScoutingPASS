@@ -195,6 +195,10 @@ var config_data = `
       },
       "defaultValue": "x"
     },
+    { "name": "Defense Penalty",
+      "code": "pen",
+      "type": "bool"
+    },
     { "name": "Died/No Show",
       "code": "die",
       "type": "bool"
