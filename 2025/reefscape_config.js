@@ -197,12 +197,7 @@ var config_data = `
     },
     { "name": "Defense Penalities",
       "code": "dp",
-      "type": "radio",
-      "choices": {
-        "y": "Yes<br>",
-        "n": "No",
-      },
-      "defaultValue": "n"
+      "type": "bool"
     },
     { "name": "Died/No Show",
       "code": "die",
