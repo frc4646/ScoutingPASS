@@ -184,6 +184,10 @@ var config_data = `
       },
       "defaultValue": "x"
     },
+    { "name": "Defense<br>Penalty",
+      "code": "pen",
+      "type": "bool"
+    },
     { "name": "Handled/Reacted to Defense Rating",
       "code": "hdr",
       "type": "radio",
@@ -194,10 +198,6 @@ var config_data = `
         "x": "Not Observed"
       },
       "defaultValue": "x"
-    },
-    { "name": "Defense<br>Penalty",
-      "code": "pen",
-      "type": "bool"
     },
     { "name": "Died/No Show",
       "code": "die",
