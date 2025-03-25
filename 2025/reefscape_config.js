@@ -173,17 +173,36 @@ var config_data = `
       },
       "defaultValue": "x"
     },
-    { "name": "Defense Rating",
-      "code": "dr",
+    { "name": "Played Defense Rating",
+      "code": "pdr",
       "type": "radio",
       "choices": {
-        "b": "Below Average<br>",
+        "n": "Not Effective<br>",
         "a": "Average<br>",
-        "g": "Good<br>",
-        "e": "Excellent<br>",
-        "x": "Did not play defense"
+        "v": "Very Effective<br>",
+        "x": "Not Observed"
       },
       "defaultValue": "x"
+    },
+    { "name": "Handled/Reacted to Defense Rating",
+      "code": "hdr",
+      "type": "radio",
+      "choices": {
+        "n": "Not Effective<br>",
+        "a": "Average<br>",
+        "v": "Very Effective<br>",
+        "x": "Not Observed"
+      },
+      "defaultValue": "x"
+    },
+    { "name": "Defense Penalities",
+      "code": "dp",
+      "type": "radio",
+      "choices": {
+        "y": "Yes<br>",
+        "n": "No",
+      },
+      "defaultValue": "n"
     },
     { "name": "Died/No Show",
       "code": "die",
