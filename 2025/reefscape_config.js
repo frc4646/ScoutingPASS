@@ -195,7 +195,7 @@ var config_data = `
       },
       "defaultValue": "x"
     },
-    { "name": "Defense Penalty",
+    { "name": "Defense<br>Penalty",
       "code": "pen",
       "type": "bool"
     },
