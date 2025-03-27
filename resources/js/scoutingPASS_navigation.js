@@ -39,7 +39,11 @@ function swipePage(increment) {
             slides[slide].style.display = "table";
             // hack for starting cycle timer in telop for 2024
             if (slides[slide].id == 'teleop') {
-                timerForceStart(document.getElementById('startForce_tct').parentNode)
+                var start_force = document.getElementById('startForce_tct')
+                if (start_force != null)
+                {
+                    timerForceStart(start_force.parentNode)
+                }
             }
             document.getElementById('data').innerHTML = "";
             document.getElementById('copyButton').setAttribute('value', 'Copy Data');

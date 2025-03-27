@@ -189,7 +189,6 @@ h2 {
 #nextButton2,
 #nextButton9,
 #nextButton10,
-.clearForm,
 .submitForm,
 #displayButton,
 #copyButton,
@@ -197,6 +196,16 @@ h2 {
     font-family: Alexis;
     padding: 10px;
     background-color: rgb(240, 141, 141);
+    text-decoration: none;
+    display: inline-block;
+}
+
+
+.clearForm {
+    font-family: Alexis;
+    font-size: larger;
+    padding: 15px;
+    background-color: rgb(253, 64, 64);
     text-decoration: none;
     display: inline-block;
 }
