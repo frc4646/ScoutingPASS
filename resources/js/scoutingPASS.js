@@ -5,7 +5,8 @@
 
 var enableGoogleSheets = false;
 var pitScouting = false;
-var checkboxAs = 'TrueFalse';
+var checkboxAs = 'YN';
+var ColWidth = '200px';
 
 // Options
 var options = {
@@ -14,9 +15,718 @@ var options = {
   quietZoneColor: '#FFFFFF'
 };
 
-// Must be filled in: e=event, m=match#, l=level(q,qf,sf,f), t=team#, r=robot(r1,r2,b1..), s=scouter
-//var requiredFields = ["e", "m", "l", "t", "r", "s", "as"];
-var requiredFields = ["e", "m", "l", "r", "s", "as"];
+// Built from the JSON
+var requiredFields = []; //["e", "m", "l", "r", "s", "as"];
+
+function addTimer(table, idx, name, data) {
+  var row = table.insertRow(idx);
+  var cell1 = row.insertCell(0);
+  cell1.setAttribute("colspan", 2);
+  cell1.setAttribute("style", "text-align: center;");
+  cell1.classList.add("title");
+  if (!data.hasOwnProperty('code')) {
+    cell1.innerHTML = `Error: No code specified for ${name}`;
+    return idx + 1;
+  }
+  cell1.innerHTML = name;
+  if (data.hasOwnProperty('tooltip')) {
+    cell1.setAttribute("title", data.tooltip);
+  }
+
+  idx += 1
+  row = table.insertRow(idx);
+  cell = row.insertCell(0);
+  cell.setAttribute("colspan", 2);
+  cell.setAttribute("style", "text-align: center;");
+
+  if (data.type == 'cycle') {
+    var ct = document.createElement('input');
+    ct.setAttribute("type", "hidden");
+    ct.setAttribute("id", "cycletime_" + data.code);
+    if (enableGoogleSheets && data.hasOwnProperty('gsCol')) {
+      ct.setAttribute("name", data.gsCol);
+    } else {
+      ct.setAttribute("name", data.code);
+    }
+    ct.setAttribute("value", "[]");
+    cell.appendChild(ct);
+    ct = document.createElement('input');
+    ct.setAttribute("type", "text");
+    ct.setAttribute("id", "display_" + data.code);
+    ct.setAttribute("value", "");
+    ct.setAttribute("disabled", "");
+    cell.appendChild(ct);
+    var lineBreak = document.createElement("br");
+    cell.appendChild(lineBreak);
+  }
+  var button1 = document.createElement("input");
+  button1.setAttribute("id", "start_" + data.code);
+  button1.setAttribute("type", "button");
+  button1.setAttribute("onclick", "timer(this.parentElement)");
+  button1.setAttribute("value", "Start");
+  cell.appendChild(button1);
+
+  var inp = document.createElement("input");
+  if (data.type == 'timer') {
+    inp.classList.add("timer");
+  } else {
+    inp.classList.add("cycle");
+  }
+  inp.setAttribute("id", "input_" + data.code);
+  inp.setAttribute("type", "text");
+  if (data.type != 'cycle') {
+    if (enableGoogleSheets && data.hasOwnProperty('gsCol')) {
+      inp.setAttribute("name", data.gsCol);
+    } else {
+      inp.setAttribute("name", data.code);
+    }
+  }
+  inp.setAttribute("style", "background-color: black; color: white;border: none; text-align: center;");
+  inp.setAttribute("disabled", "");
+  inp.setAttribute("value", 0);
+  inp.setAttribute("size", 7);
+  inp.setAttribute("maxLength", 7);
+  cell.appendChild(inp);
+
+  var button2 = document.createElement("input");
+  button2.setAttribute("id", "clear_" + data.code);
+  button2.setAttribute("type", "button");
+  button2.setAttribute("onclick", "resetTimer(this.parentElement)");
+  button2.setAttribute("value", "Reset");
+  cell.appendChild(button2);
+  var lineBreak = document.createElement("br");
+  cell.appendChild(lineBreak);
+
+  if (data.type == 'cycle') {
+    var button3 = document.createElement("input");
+    button3.setAttribute("id", "cycle_" + data.code);
+    button3.setAttribute("type", "button");
+    button3.setAttribute("onclick", "newCycle(this.parentElement)");
+    button3.setAttribute("value", "New Cycle");
+    cell.appendChild(button3);
+    var button4 = document.createElement("input");
+    button4.setAttribute("id", "undo_" + data.code);
+    button4.setAttribute("type", "button");
+    button4.setAttribute("onclick", "undoCycle(this.parentElement)");
+    button4.setAttribute("value", "Undo");
+    button4.setAttribute('style', "margin-left: 20px;");
+    cell.appendChild(button4);
+  }
+
+  idx += 1
+  row = table.insertRow(idx);
+  row.setAttribute("style", "display:none");
+  cell = row.insertCell(0);
+  cell.setAttribute("colspan", 2);
+  cell.setAttribute("style", "text-align: center;");
+  var inp = document.createElement('input');
+  inp.setAttribute("type", "hidden");
+  inp.setAttribute("id", "status_" + data.code);
+  inp.setAttribute("value", "stopped");
+  cell.appendChild(inp);
+  inp = document.createElement('input');
+  inp.setAttribute("hidden", "");
+  inp.setAttribute("id", "intervalId_" + data.code);
+  inp.setAttribute("value", "");
+  cell.appendChild(inp);
+
+  if (data.hasOwnProperty('defaultValue')) {
+    var def = document.createElement("input");
+    def.setAttribute("id", "default_" + data.code)
+    def.setAttribute("type", "hidden");
+    def.setAttribute("value", data.defaultValue);
+    cell2.appendChild(def);
+  }
+
+  return idx + 1;
+}
+
+function addCounter(table, idx, name, data) {
+  const row = table.insertRow(idx);
+  const hasExtraInc = data.hasOwnProperty('altInc1') || data.hasOwnProperty('altInc2');
+  
+  // Error Handling
+  if (!data.hasOwnProperty('code')) {
+    const errorCell = row.insertCell(0);
+    errorCell.classList.add("title");
+    errorCell.innerHTML = `Error: No code specified for ${name}`;
+    return idx + 1;
+  }
+
+  // Create title cell
+  const titleCell = row.insertCell(0);
+  titleCell.classList.add("title");
+  if (data.hasOwnProperty('tooltip')) {
+    titleCell.setAttribute("title", data.tooltip);
+  }
+
+  let controlCell;
+
+  if (hasExtraInc) {
+    // When extra increments exist, use a single cell with colspan
+    titleCell.setAttribute("colspan", 2);
+    titleCell.style.cssText = 'text-align: center; vertical-align: middle;';
+    
+    // Create wrapper div for flex layout
+    const wrapper = document.createElement("div");
+    wrapper.style.cssText = 'display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;';
+    
+    // Create label
+    const label = document.createElement("div");
+    label.textContent = name;
+    label.style.cssText = 'margin-bottom: 4px;';
+    wrapper.appendChild(label);
+    
+    titleCell.appendChild(wrapper);
+    controlCell = wrapper;
+  } else {
+    // Standard two-cell layout
+    titleCell.style.width = ColWidth;
+    titleCell.innerHTML = `${name}&nbsp;`;
+    
+    controlCell = row.insertCell(1);
+    controlCell.style.width = ColWidth;
+    controlCell.classList.add("field");
+    controlCell.style.cssText = 'text-align: center !important; vertical-align: middle;';
+  }
+
+  // Create centered container for buttons
+  const centerContainer = document.createElement("div");
+  centerContainer.style.cssText = 'display: flex; justify-content: center; align-items: center; width: 100%;';
+  
+  // Create button group
+  const buttonGroup = document.createElement("div");
+  buttonGroup.style.cssText = 'display: inline-flex; align-items: center; gap: 10px;';
+
+  // Helper to create input elements
+  const createInput = (type, id, value, incrementValue) => {
+    const input = document.createElement("input");
+    input.type = type;
+    if (id) input.id = id;
+    if (value !== undefined) input.value = value;
+    if (incrementValue !== undefined) {
+      input.onclick = function() {
+        counter(this.parentElement.parentElement.parentElement, incrementValue);
+      };
+    }
+	// Prevent double-tap zoom on buttons
+    if (type === "button") {
+      input.style.touchAction = 'manipulation';
+    }
+    return input;
+  };
+
+  // Build buttons from left to right
+  if (data.altInc1) {
+    buttonGroup.appendChild(createInput("button", `minusInc1_${data.code}`, -data.altInc1, -data.altInc1));
+  }
+  
+  if (data.altInc2) {
+    buttonGroup.appendChild(createInput("button", `minusInc2_${data.code}`, -data.altInc2, -data.altInc2));
+  }
+  
+  buttonGroup.appendChild(createInput("button", `minus_${data.code}`, "-", -1));
+
+  // Create main counter input
+  const counterInput = createInput("text", `input_${data.code}`, 0);
+  counterInput.classList.add("counter");
+  counterInput.name = (enableGoogleSheets && data.gsCol) ? data.gsCol : data.code;
+  counterInput.disabled = true;
+  counterInput.maxLength = 4;
+  counterInput.style.cssText = 'background-color: black; color: white; border: none; text-align: center; width: 3ch;';
+  buttonGroup.appendChild(counterInput);
+
+  buttonGroup.appendChild(createInput("button", `plus_${data.code}`, "+", 1));
+  
+  if (data.altInc2) {
+    buttonGroup.appendChild(createInput("button", `plusInc2_${data.code}`, `+${data.altInc2}`, data.altInc2));
+  }
+  
+  if (data.altInc1) {
+    buttonGroup.appendChild(createInput("button", `plusInc1_${data.code}`, `+${data.altInc1}`, data.altInc1));
+  }
+
+  // Nest: centerContainer -> buttonGroup
+  centerContainer.appendChild(buttonGroup);
+  controlCell.appendChild(centerContainer);
+
+  // Add hidden metadata fields directly to controlCell
+  if (data.cycleTimer) {
+    const timerInput = createInput("hidden", `cycleTimer_${data.code}`, data.cycleTimer);
+    controlCell.appendChild(timerInput);
+  }
+
+  if (data.hasOwnProperty('defaultValue')) {
+    const defaultInput = createInput("hidden", `default_${data.code}`, data.defaultValue);
+    controlCell.appendChild(defaultInput);
+  }
+
+  return idx + 1;
+}
+
+function addClickableImage(table, idx, name, data) {
+  var row = table.insertRow(idx);
+  var cell = row.insertCell(0);
+  cell.setAttribute("colspan", 2);
+  cell.setAttribute("style", "text-align: center;");
+  cell.classList.add("title");
+  if (!data.hasOwnProperty('code')) {
+    cell1.innerHTML = `Error: No code specified for ${name}`;
+    return idx + 1;
+  }
+  cell.innerHTML = name;
+  if (data.hasOwnProperty('tooltip')) {
+    cell.setAttribute("title", data.tooltip);
+  }
+
+  let showFlip = true;
+  if (data.hasOwnProperty('showFlip')) {
+    if (data.showFlip.toLowerCase() == 'false') {
+      showFlip = false;
+    }
+  }
+
+  let showUndo = true;
+  if (data.hasOwnProperty('showUndo')) {
+    if (data.showUndo.toLowerCase() == 'false') {
+      showUndo = false;
+    }
+  }
+
+  if (showFlip || showUndo) {
+    idx += 1
+    row = table.insertRow(idx);
+    cell = row.insertCell(0);
+    cell.setAttribute("colspan", 2);
+    cell.setAttribute("style", "text-align: center;");
+
+    if (showUndo) {
+      // Undo button
+      let undoButton = document.createElement("input");
+      undoButton.setAttribute("type", "button");
+      undoButton.setAttribute("onclick", "undo(this.parentElement)");
+      undoButton.setAttribute("value", "Undo");
+      undoButton.setAttribute("id", "undo_" + data.code);
+      undoButton.setAttribute("class", "undoButton");
+      cell.appendChild(undoButton);
+    }
+
+    if (showFlip) {
+      // Flip button
+      let flipButton = document.createElement("input");
+      flipButton.setAttribute("type", "button");
+      flipButton.setAttribute("onclick", "flip(this.parentElement)");
+      flipButton.setAttribute("value", "Flip Image");
+      flipButton.setAttribute("id", "flip_" + data.code);
+      flipButton.setAttribute("class", "flipButton");
+      if (showUndo) {
+        flipButton.setAttribute("margin-left", '8px');
+      }
+      cell.appendChild(flipButton);
+    }
+  }
+
+  idx += 1;
+  row = table.insertRow(idx);
+  cell = row.insertCell(0);
+  cell.setAttribute("colspan", 2);
+  cell.setAttribute("style", "text-align: center;");
+  var canvas = document.createElement('canvas');
+  //canvas.onclick = onFieldClick;
+  canvas.setAttribute("onclick", "onFieldClick(event)");
+  canvas.setAttribute("class", "field-image-src");
+  canvas.setAttribute("id", "canvas_" + data.code);
+  canvas.innerHTML = "No canvas support";
+  cell.appendChild(canvas);
+
+  idx += 1;
+  row = table.insertRow(idx);
+  row.setAttribute("style", "display:none");
+  cell = row.insertCell(0);
+  cell.setAttribute("colspan", 2);
+  var inp = document.createElement('input');
+  inp.setAttribute("type", "hidden");
+  inp.setAttribute("id", "XY_" + data.code);
+  inp.setAttribute("value", "[]");
+  cell.appendChild(inp);
+  inp = document.createElement('input');
+  inp.setAttribute("hidden", "");
+  if (enableGoogleSheets && data.hasOwnProperty('gsCol')) {
+    inp.setAttribute("name", data.gsCol);
+  } else {
+    inp.setAttribute("name", data.code);
+  }
+  inp.setAttribute("id", "input_" + data.code);
+  inp.setAttribute("value", "[]");
+  inp.setAttribute("class", "clickableImage");
+
+  cell.appendChild(inp);
+
+  // TODO: Make these more efficient/elegant
+  inp = document.createElement('input');
+  inp.setAttribute("hidden", "");
+  inp.setAttribute("id", "clickRestriction_" + data.code);
+  inp.setAttribute("value", "none");
+  if (data.hasOwnProperty('clickRestriction')) {
+    if ((data.clickRestriction == "one") ||
+      (data.clickRestriction == "onePerBox")) {
+      inp.setAttribute("value", data.clickRestriction);
+    }
+  }
+  cell.appendChild(inp);
+
+  inp = document.createElement('input');
+  inp.setAttribute("hidden", "");
+  inp.setAttribute("id", "allowableResponses_" + data.code);
+  inp.setAttribute("value", "none");
+  if (data.hasOwnProperty('allowableResponses')) {
+    let responses = data.allowableResponses.split(' ').map(Number)
+    inp.setAttribute("value", responses);
+  }
+  cell.appendChild(inp);
+
+  inp = document.createElement('input');
+  inp.setAttribute("hidden", "");
+  inp.setAttribute("id", "dimensions_" + data.code);
+  inp.setAttribute("value", "12 6");
+  if (data.hasOwnProperty('dimensions')) {
+    if (data.dimensions != "") {
+      // TODO: Add validation for "X Y" format
+      inp.setAttribute("value", data.dimensions);
+    }
+  }
+  cell.appendChild(inp);
+
+  inp = document.createElement('input');
+  inp.setAttribute("hidden", "");
+  inp.setAttribute("id", "shape_" + data.code);
+  // Default shape: white circle of size 5 not filled in
+  inp.setAttribute("value", "circle 5 white white true");
+  if (data.hasOwnProperty('shape')) {
+    if (data.shape != "") {
+      // TODO: Add validation for "shape size color fill" format
+      inp.setAttribute("value", data.shape);
+    }
+  }
+  cell.appendChild(inp);
+
+  inp = document.createElement('input');
+  inp.setAttribute("hidden", "");
+  inp.setAttribute("id", "toggleClick_" + data.code);
+  inp.setAttribute("value", "false");
+  if (data.hasOwnProperty('toggleClick')) {
+    if (data.toggleClick != "") {
+      // TODO: Add validation for true/false format
+      inp.setAttribute("value", data.toggleClick);
+    }
+  }
+  cell.appendChild(inp);
+
+  if (data.hasOwnProperty('cycleTimer')) {
+    if (data.cycleTimer != "") {
+      inp = document.createElement('input');
+      inp.setAttribute("hidden", "");
+      inp.setAttribute("id", "cycleTimer_" + data.code);
+      inp.setAttribute("value", data.cycleTimer);
+      cell.appendChild(inp);
+    }
+  }
+
+  idx += 1
+  row = table.insertRow(idx);
+  row.setAttribute("style", "display:none");
+  cell = row.insertCell(0);
+  cell.setAttribute("colspan", 2);
+  var img = document.createElement('img');
+  img.src = data.filename;
+  img.setAttribute("id", "img_" + data.code);
+  img.setAttribute("class", "field-image-src");
+  img.setAttribute("onload", "drawFields()");
+  img.setAttribute("hidden", "");
+  cell.appendChild(img);
+
+  return idx + 1
+}
+
+function addText(table, idx, name, data) {
+  var row = table.insertRow(idx);
+  var cell1 = row.insertCell(0);
+  cell1.style.width = ColWidth;
+  cell1.classList.add("title");
+  if (!data.hasOwnProperty('code')) {
+    cell1.innerHTML = `Error: No code specified for ${name}`;
+    return idx + 1;
+  }
+  var cell2 = row.insertCell(1);
+  cell2.style.width = ColWidth;
+  cell1.innerHTML = name + '&nbsp;';
+  if (data.hasOwnProperty('tooltip')) {
+    cell1.setAttribute("title", data.tooltip);
+  }
+  cell2.classList.add("field");
+  var inp = document.createElement("input");
+  inp.setAttribute("id", "input_" + data.code);
+  inp.setAttribute("type", "text");
+  if (enableGoogleSheets && data.hasOwnProperty('gsCol')) {
+    inp.setAttribute("name", data.gsCol);
+  } else {
+    inp.setAttribute("name", data.code);
+  }
+  if (data.hasOwnProperty('size')) {
+    inp.setAttribute("size", data.size);
+  }
+  if (data.hasOwnProperty('maxSize')) {
+    inp.setAttribute("maxLength", data.maxSize);
+  }
+  if (data.hasOwnProperty('defaultValue')) {
+    if (data.type == 'event') {
+      data.defaultValue = data.defaultValue.toLowerCase();
+    }
+    inp.setAttribute("value", data.defaultValue);
+  }
+  if (data.hasOwnProperty('required')) {
+    inp.setAttribute("required", "");
+  }
+  if (data.hasOwnProperty('disabled')) {
+    inp.setAttribute("disabled", "");
+  }
+  cell2.appendChild(inp);
+
+  if (data.hasOwnProperty('defaultValue')) {
+    var def = document.createElement("input");
+    def.setAttribute("id", "default_" + data.code)
+    def.setAttribute("type", "hidden");
+    def.setAttribute("value", data.defaultValue);
+    cell2.appendChild(def);
+  }
+
+  return idx + 1
+}
+
+function addNumber(table, idx, name, data) {
+  var row = table.insertRow(idx);
+  var cell1 = row.insertCell(0);
+  cell1.style.width = ColWidth;
+  cell1.classList.add("title");
+  if (!data.hasOwnProperty('code')) {
+    cell1.innerHTML = `Error: No code specified for ${name}`;
+    return idx + 1;
+  }
+  var cell2 = row.insertCell(1);
+  cell2.style.width = ColWidth;
+  cell1.innerHTML = name + '&nbsp;';
+  if (data.hasOwnProperty('tooltip')) {
+    cell1.setAttribute("title", data.tooltip);
+  }
+  cell2.classList.add("field");
+  var inp = document.createElement("input");
+  inp.setAttribute("id", "input_" + data.code);
+  inp.setAttribute("type", "number");
+  if (enableGoogleSheets && data.hasOwnProperty('gsCol')) {
+    inp.setAttribute("name", data.gsCol);
+  } else {
+    inp.setAttribute("name", data.code);
+  }
+  if ((data.type == 'team') ||
+    (data.type == 'match')) {
+    inp.setAttribute("onchange", "updateMatchStart(event)");
+  }
+  if (data.hasOwnProperty('min')) {
+    inp.setAttribute("min", data.min);
+  }
+  if (data.hasOwnProperty('max')) {
+    inp.setAttribute("max", data.max);
+  }
+  if (data.hasOwnProperty('defaultValue')) {
+    inp.setAttribute("value", data.defaultValue);
+  }
+  if (data.hasOwnProperty('disabled')) {
+    inp.setAttribute("disabled", "");
+  }
+  if (data.hasOwnProperty('required')) {
+    inp.setAttribute("required", "");
+  }
+  cell2.appendChild(inp);
+
+  if (data.hasOwnProperty('defaultValue')) {
+    var def = document.createElement("input");
+    def.setAttribute("id", "default_" + data.code)
+    def.setAttribute("type", "hidden");
+    def.setAttribute("value", data.defaultValue);
+    cell2.appendChild(def);
+  }
+
+  if (data.type == 'team') {
+    idx += 1
+    row = table.insertRow(idx);
+    cell1 = row.insertCell(0);
+    cell1.setAttribute("id", "teamname-label");
+    cell1.setAttribute("colspan", 2);
+    cell1.setAttribute("style", "text-align: center;");
+  }
+
+  return idx + 1;
+}
+
+function addRadio(table, idx, name, data) {
+  var row = table.insertRow(idx);
+  var cell1 = row.insertCell(0);
+  cell1.style.width = ColWidth;
+  cell1.classList.add("title");
+  if (!data.hasOwnProperty('code')) {
+    cell1.innerHTML = `Error: No code specified for ${name}`;
+    return idx + 1;
+  }
+  var cell2 = row.insertCell(1);
+  cell2.style.width = ColWidth;
+  cell1.innerHTML = name + '&nbsp;';
+  if (data.hasOwnProperty('tooltip')) {
+    cell1.setAttribute("title", data.tooltip);
+  }
+  cell2.classList.add("field");
+  if ((data.type == 'level') ||
+    (data.type == 'robot')
+  ) {
+    cell2.setAttribute("onchange", "updateMatchStart(event)");
+  }
+  var checked = null
+  if (data.hasOwnProperty('defaultValue')) {
+    checked = data.defaultValue;
+  }
+  if (data.hasOwnProperty('choices')) {
+    keys = Object.keys(data.choices);
+    keys.forEach(c => {
+      var inp = document.createElement("input");
+      inp.setAttribute("id", "input_" + data.code + "_" + c);
+      inp.setAttribute("type", "radio");
+      if (enableGoogleSheets && data.hasOwnProperty('gsCol')) {
+        inp.setAttribute("name", data.gsCol);
+      } else {
+        inp.setAttribute("name", data.code);
+      }
+      inp.setAttribute("value", c);
+      if (checked == c) {
+        inp.setAttribute("checked", "");
+      }
+      cell2.appendChild(inp);
+      cell2.innerHTML += data.choices[c];
+    });
+  }
+  var inp = document.createElement("input");
+  inp.setAttribute("id", "display_" + data.code);
+  inp.setAttribute("hidden", "");
+  inp.setAttribute("value", "");
+  cell2.appendChild(inp);
+
+  if (data.hasOwnProperty('defaultValue')) {
+    var def = document.createElement("input");
+    def.setAttribute("id", "default_" + data.code)
+    def.setAttribute("type", "hidden");
+    def.setAttribute("value", data.defaultValue);
+    cell2.appendChild(def);
+  }
+
+  return idx + 1;
+}
+
+function addCheckbox(table, idx, name, data) {
+  var row = table.insertRow(idx);
+  var cell1 = row.insertCell(0);
+  cell1.style.width = ColWidth;
+  cell1.classList.add("title");
+  if (!data.hasOwnProperty('code')) {
+    cell1.innerHTML = `Error: No code specified for ${name}`;
+    return idx + 1;
+  }
+  var cell2 = row.insertCell(1);
+  cell1.innerHTML = name + '&nbsp;';
+  cell2.style.width = ColWidth;
+  if (data.hasOwnProperty('tooltip')) {
+    cell1.setAttribute("title", data.tooltip);
+  }
+  cell2.classList.add("field");
+  var inp = document.createElement("input");
+  inp.setAttribute("id", "input_" + data.code);
+  inp.setAttribute("type", "checkbox");
+  if (enableGoogleSheets && data.hasOwnProperty('gsCol')) {
+    inp.setAttribute("name", data.gsCol);
+  } else {
+    inp.setAttribute("name", data.code);
+  }
+  cell2.appendChild(inp);
+
+  if (data.type == 'bool') {
+    cell2.innerHTML += "(checked = Yes)";
+  }
+
+  if (data.hasOwnProperty('defaultValue')) {
+    var def = document.createElement("input");
+    def.setAttribute("id", "default_" + data.code)
+    def.setAttribute("type", "hidden");
+    def.setAttribute("value", data.defaultValue);
+    cell2.appendChild(def);
+  }
+
+  return idx + 1;
+}
+
+function addElement(table, idx, data) {
+  var type = null;
+  var name = 'Default Name';
+  if (data.hasOwnProperty('name')) {
+    name = data.name
+  }
+  if (data.hasOwnProperty('type')) {
+    type = data.type
+  } else {
+    console.log("No type specified");
+    console.log("Data: ")
+    console.log(data);
+    err = { code: "err", defaultValue: "No type specified: " + data };
+    idx = addText(table, idx, name, err);
+    return
+  }
+  if (type == 'counter') {
+    idx = addCounter(table, idx, name, data);
+  } else if ((data.type == 'scouter') ||
+    (data.type == 'event') ||
+    (data.type == 'text')
+  ) {
+    idx = addText(table, idx, name, data);
+  } else if ((data.type == 'level') ||
+    (data.type == 'radio') ||
+    (data.type == 'robot')
+  ) {
+    idx = addRadio(table, idx, name, data);
+  } else if ((data.type == 'match') ||
+    (data.type == 'team') ||
+    (data.type == 'number')
+  ) {
+    idx = addNumber(table, idx, name, data);
+  } else if ((data.type == 'field_image') ||
+    (data.type == 'clickable_image')) {
+    idx = addClickableImage(table, idx, name, data);
+  } else if ((data.type == 'bool') ||
+    (data.type == 'checkbox') ||
+    (data.type == 'pass_fail')
+  ) {
+    idx = addCheckbox(table, idx, name, data);
+  } else if (data.type == 'counter') {
+    idx = addCounter(table, idx, name, data);
+  } else if ((data.type == 'timer') ||
+    (data.type == 'cycle')) {
+    idx = addTimer(table, idx, name, data);
+  } else {
+    console.log(`Unrecognized type: ${data.type}`);
+  }
+  return idx
+}
+
+function buildRequiredElementList(element) {
+	if (element.required == "true") {
+		requiredFields.push(element.code);
+	}
+}
 
 function configure() {
   try {
@@ -28,6 +738,7 @@ function configure() {
     var table = document.getElementById("prematch_table")
     var row = table.insertRow(0);
     var cell1 = row.insertCell(0);
+	cell1.style.width = ColWidth;
     cell1.innerHTML = `Error parsing configuration file: ${err.message}<br><br>Use a tool like <a href="http://jsonlint.com/">http://jsonlint.com/</a> to help you debug your config file`
     return -1
   }
@@ -78,6 +789,7 @@ function configure() {
   var idx = 0;
   pmc.forEach(element => {
     idx = addElement(pmt, idx, element);
+	buildRequiredElementList(element);
   });
 
   // Configure auton screen
@@ -141,16 +853,16 @@ function validateData() {
   var errStr = "";
   for (rf of requiredFields) {
     var thisRF = document.forms.scoutingForm[rf];
-    if (thisRF.value == "[]" || thisRF.value.length == 0) {
-      if (rf == "as") {
-        rftitle = "Auto Start Position"
-      } else {
-        thisInputEl = thisRF instanceof RadioNodeList ? thisRF[0] : thisRF;
-        rftitle = thisInputEl.parentElement.parentElement.children[0].innerHTML.replace("&nbsp;", "");
-      }
-      errStr += rf + ": " + rftitle + "\n";
-      ret = false;
-    }
+	if (thisRF.value == "[]" || thisRF.value.length == 0) {
+	  if (rf == "as") {
+		rftitle = "Auto Start Position"
+	  } else {
+		thisInputEl = thisRF instanceof RadioNodeList ? thisRF[0] : thisRF;
+		rftitle = thisInputEl.parentElement.parentElement.children[0].innerHTML.replace("&nbsp;","");
+	  }
+	  errStr += rf + ": " + rftitle + "\n";
+	  ret = false;
+	}
   }
   if (ret == false) {
     alert("Enter all required values\n" + errStr);
@@ -347,6 +1059,189 @@ function clearForm() {
   drawFields()
 }
 
+function startTouch(e) {
+  initialX = e.touches[0].screenX;
+};
+
+function moveTouch(e) {
+  if (initialX === null) {
+    return;
+  }
+
+  var currentX = e.changedTouches[0].screenX;
+  var diffX = initialX - currentX;
+
+  // sliding horizontally
+  if (diffX / screen.width > xThreshold) {
+    // swiped left
+    swipePage(1);
+  } else if (diffX / screen.width < -xThreshold) {
+    // swiped right
+    swipePage(-1);
+  }
+  initialX = null;
+};
+
+function swipePage(increment) {
+  if (qr_regenerate() == true) {
+    slides = document.getElementById("main-panel-holder").children
+    if (slide + increment < slides.length && slide + increment >= 0) {
+      slides[slide].style.display = "none";
+      slide += increment;
+      window.scrollTo(0, 0);
+      slides[slide].style.display = "table";
+      document.getElementById('data').innerHTML = "";
+      document.getElementById('copyButton').setAttribute('value','Copy Data');
+    }
+  }
+}
+
+function drawFields(name) {
+  var fields = document.querySelectorAll("[id*='canvas_']");
+
+  for (f of fields) {
+    code = f.id.substring(7);
+    var img = document.getElementById("img_" + code);
+    var shape = document.getElementById("shape_" + code);
+    let shapeArr = shape.value.split(' ');
+    var ctx = f.getContext("2d");
+    var imgWidth = img.width;
+    var imgHeight = img.height;
+    let scale_factor = Math.min(ctx.canvas.width / img.width, ctx.canvas.height / img.height);
+    let newWidth = img.width * scale_factor;
+    let newHeight = img.height * scale_factor;
+    if (newWidth > 0) {
+      ctx.canvas.width = newWidth
+    }
+    if (newHeight > 0) {
+      ctx.canvas.height = newHeight
+    }
+    ctx.clearRect(0, 0, newWidth, newHeight);
+    ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+    var xyStr = document.getElementById("XY_" + code).value
+    if (JSON.stringify(xyStr).length > 2) {
+      pts = Array.from(JSON.parse(xyStr))
+      for (p of pts) {
+        var coord = p.split(",")
+        var centerX = coord[0];
+        var centerY = coord[1];
+        var radius = 5;
+        ctx.beginPath();
+        if (shapeArr[0].toLowerCase() == 'circle') {
+          ctx.arc(centerX, centerY, shapeArr[1], 0, 2 * Math.PI, false);
+        } else {
+          ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+        }
+        ctx.lineWidth = 2;
+        if (shapeArr[2] != "") {
+          ctx.strokeStyle = shapeArr[2];
+        } else {
+          ctx.strokeStyle = '#FFFFFF';
+        }
+        if (shapeArr[4].toLowerCase() == 'true') {
+          ctx.fillStyle = shapeArr[3];
+        }
+        ctx.stroke();
+        if (shapeArr[4].toLowerCase() == 'true') {
+          ctx.fill();
+        }
+      }
+    }
+  }
+}
+
+function onFieldClick(event) {
+  let target = event.target;
+  let base = getIdBase(target.id);
+
+  //Resolution height and width (e.g. 52x26)
+  let resX = 12;
+  let resY = 6;
+
+  let dimensions = document.getElementById("dimensions" + base);
+  if (dimensions.value != "") {
+    let arr = dimensions.value.split(' ');
+    resX = arr[0];
+    resY = arr[1];
+  }
+
+  //Turns coordinates into a numeric box
+  let box = ((Math.ceil(event.offsetY / target.height * resY) - 1) * resX) + Math.ceil(event.offsetX / target.width * resX);
+  let coords = event.offsetX + "," + event.offsetY;
+
+  let allowableResponses = document.getElementById("allowableResponses" + base).value;
+
+  if(allowableResponses != "none"){
+    allowableResponsesList = allowableResponses.split(',').map(Number);
+    if (allowableResponsesList.indexOf(box)==-1){
+      return;
+    }
+  }
+
+  //Cumulating values
+  let changingXY = document.getElementById("XY" + base);
+  let changingInput = document.getElementById("input" + base);
+  let clickRestriction = document.getElementById("clickRestriction" + base).value;
+  let toggleClick = document.getElementById("toggleClick" + base).value;
+  let cycleTimer = document.getElementById("cycleTimer" + base);
+  let boxArr = Array.from(JSON.parse(changingInput.value));
+  let xyArr = Array.from(JSON.parse(changingXY.value));
+
+  if ((toggleClick.toLowerCase() == 'true') &&
+    (boxArr.includes(box))) {
+    // Remove it
+    let idx = boxArr.indexOf(box);
+    boxArr.splice(idx, 1);
+    xyArr.splice(idx, 1);
+    changingInput.value = JSON.stringify(boxArr);
+    changingXY.value = JSON.stringify(xyArr);
+  } else {
+    if (JSON.stringify(changingXY.value).length <= 2) {
+      changingXY.value = JSON.stringify([coords]);
+      changingInput.value = JSON.stringify([box]);
+    } else if (clickRestriction == "one") {
+      // Replace box and coords
+      changingXY.value = JSON.stringify([coords]);
+      changingInput.value = JSON.stringify([box]);
+    } else if (clickRestriction == "onePerBox") {
+      // Add if box already not in box list/Array
+      if (!boxArr.includes(box)) {
+        boxArr.push(box);
+        changingInput.value = JSON.stringify(boxArr);
+
+        coords = findMiddleOfBox(box, target.width, target.height, resX, resY);
+        xyArr.push(coords);
+        changingXY.value = JSON.stringify(xyArr);
+      }
+    } else {
+      // No restrictions - add to array
+      xyArr.push(coords);
+      changingXY.value = JSON.stringify(xyArr);
+
+      boxArr.push(box);
+      changingInput.value = JSON.stringify(boxArr);
+    }
+    // If associated with cycleTimer - send New Cycle EVENT
+    if (cycleTimer != null) {
+      document.getElementById("cycle_" + cycleTimer.value).click();
+    }
+  }
+
+  drawFields()
+}
+
+function findMiddleOfBox(boxNum, width, height, resX, resY) {
+  let boxHeight = height / resY;
+  let boxWidth = width / resX;
+  let boxX = (boxNum % resX) - 1;
+  if (boxX == -1) { boxX = resX - 1 }
+  let boxY = Math.floor((boxNum - boxX + 1) / resX);
+  let x = Math.round((boxWidth * boxX) + (Math.floor(boxWidth / 2)));
+  let y = Math.round((boxHeight * boxY) + (Math.floor(boxHeight / 2)));
+  return x+","+y
+}
+
 function getIdBase(name) {
   return name.slice(name.indexOf("_"), name.length)
 }
@@ -508,6 +1403,28 @@ window.onload = function () {
       setUpGoogleSheets();
     }
   }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   createPrevDataTable();
 };
